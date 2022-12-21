@@ -37,4 +37,8 @@ public class Usuario {
         this.senha = senha;
     }
     //endregion
+
+    public boolean verificarSenha(String senha) {
+        return this.senha.equals(senha);
+    }
 }

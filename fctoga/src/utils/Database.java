@@ -1,6 +1,6 @@
 package utils;
 
-import models.*;
+import models.Usuario;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -72,16 +72,8 @@ public class Database {
 
         List<Usuario> usuarios = new ArrayList<>();
         for (String[] usuario : usuarioQuery) {
-            Usuario instanciaUsuario = null;
-            String usuarioTipo = usuario[3];
-            switch (usuarioTipo) {
-                case "Administrador" -> instanciaUsuario = new Administrador(usuario[0], usuario[1], usuario[2]);
-                case "Promotor" -> instanciaUsuario = new Promotor(usuario[0], usuario[1], usuario[2]);
-                case "Juiz" -> instanciaUsuario = new Juiz(usuario[0], usuario[1], usuario[2], usuario[4]);
-                case "Diretor" -> instanciaUsuario = new Diretor(usuario[0], usuario[1], usuario[2]);
-                case "Advogado" ->
-                        instanciaUsuario = new Advogado(usuario[0], usuario[1], usuario[2], usuario[5], usuario[6]);
-            }
+            // Usando padrão factory
+            Usuario instanciaUsuario = FactoryUsuario.createUsuario(usuario[3], usuario[0], usuario[1], usuario[2], usuario[4], usuario[5], usuario[6]);
             usuarios.add(instanciaUsuario);
         }
         return usuarios;
