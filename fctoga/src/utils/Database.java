@@ -56,7 +56,7 @@ public class Database {
         return execute("""
                 CREATE TABLE IF NOT EXISTS usuarios(
                     usuario_cpf CHAR(11) PRIMARY KEY,
-                    usuario_nome VARCHAR(60) UNIQUE NOT NULL,
+                    usuario_nome VARCHAR(60) NOT NULL,
                     usuario_senha VARCHAR(30) NOT NULL,
                     usuario_tipo VARCHAR(20) NOT NULL,
                     usuario_comarca VARCHAR(60),
