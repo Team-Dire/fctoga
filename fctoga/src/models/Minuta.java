@@ -55,6 +55,9 @@ public class Minuta extends Anexo {
     //endregion
 
     public Boolean alterarMinuta(String textoMinuta) {
+        if (this.assinada) {
+            return false;
+        }
         this.textoMinuta = textoMinuta;
         return true;
     }
