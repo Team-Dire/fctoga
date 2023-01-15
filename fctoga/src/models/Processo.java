@@ -1,10 +1,11 @@
 package models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 
-public class Processo {
+public class Processo implements Serializable {
     private String nomeRequerente;
     private String CPF_CNPJ_Requerente;
     private String nomeRequerido;
@@ -111,7 +112,7 @@ public class Processo {
         return false;
     }
 
-    public Processo criarProcesso(String CPF_CNPJ_Requerente, String nomeRequerente, String CPF_CNPJ_Requerido, String nomeRequerido) {
+    public static Processo criarProcesso(String CPF_CNPJ_Requerente, String nomeRequerente, String CPF_CNPJ_Requerido, String nomeRequerido) {
         return new Processo(nomeRequerente, CPF_CNPJ_Requerente, nomeRequerido, CPF_CNPJ_Requerido, "Processo", false, "00000000000000000000", new Date());
     }
 

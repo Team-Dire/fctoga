@@ -4,13 +4,15 @@ import controllers.FCToga;
 
 import javax.swing.*;
 import javax.swing.text.NumberFormatter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.NumberFormat;
 
 public class Test {
     public static void main(String[] args) {
-        FCToga fc = new FCToga();
+        FCToga fc = FCToga.loadSerializedInstance();
         JFrame frame = new JFrame("Teste");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         // Botões para abrir as telas de cadastro e login
         JButton cadastroButton = new JButton("Cadastro");
         cadastroButton.addActionListener(e -> {
@@ -29,6 +31,16 @@ public class Test {
         frame.setSize(300, 400);
         // Layout como BoxLayout vertical
         frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                FCToga.serializeInstance(fc);
+                frame.dispose();
+                System.exit(0);
+            }
+        });
+
         // Define o frame como visível
         frame.setVisible(true);
     }
@@ -57,8 +69,7 @@ public class Test {
             try {
                 fc.autenticarUsuario(cpfField.getText(), senhaField.getText());
                 JOptionPane.showMessageDialog(frame, "Login realizado com sucesso!");
-            }
-            catch (Exception ex) {
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Erro ao realizar login: " + ex.getMessage());
             }
         });
