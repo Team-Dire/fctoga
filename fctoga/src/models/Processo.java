@@ -2,7 +2,6 @@ package models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 
 public class Processo implements Serializable {
@@ -99,19 +98,6 @@ public class Processo implements Serializable {
         return anexos;
     }
 
-    public Boolean alterarMinuta(String textoMinuta) {
-        Minuta ultimaMinutaDoProcesso = (Minuta) (anexos
-                .stream()
-                .filter(anexo -> anexo instanceof Minuta)
-                .sorted(Collections.reverseOrder())
-                .findFirst()
-                .orElse(null));
-        if (ultimaMinutaDoProcesso != null) {
-            return ultimaMinutaDoProcesso.alterarMinuta(textoMinuta);
-        }
-        return false;
-    }
-
     public static Processo criarProcesso(String CPF_CNPJ_Requerente, String nomeRequerente, String CPF_CNPJ_Requerido, String nomeRequerido) {
         return new Processo(nomeRequerente, CPF_CNPJ_Requerente, nomeRequerido, CPF_CNPJ_Requerido, "Processo", false, "00000000000000000000", new Date());
     }
@@ -129,20 +115,4 @@ public class Processo implements Serializable {
     public void fecharProcesso() {
         this.fechado = true;
     }
-
-    public void assinarMinuta(String nomeJuiz, String comarcaJuiz) {
-        Minuta ultimaMinutaDoProcesso = (Minuta) (anexos
-                .stream()
-                .filter(anexo -> anexo instanceof Minuta)
-                .sorted(Collections.reverseOrder())
-                .findFirst()
-                .orElse(null));
-        if (ultimaMinutaDoProcesso != null) {
-            String tipoMinuta = ultimaMinutaDoProcesso.assinarMinuta(nomeJuiz, comarcaJuiz);
-            if (tipoMinuta.equals("Sentença")) {
-                this.fechado = true;
-            }
-        }
-    }
-
 }
