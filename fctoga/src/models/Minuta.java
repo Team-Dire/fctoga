@@ -62,7 +62,7 @@ public class Minuta extends Anexo {
         return true;
     }
 
-    public Minuta criarMinuta(String tipoMinuta, String textoMinuta) {
+    public static Minuta criarMinuta(String tipoMinuta, String textoMinuta) {
         return new Minuta(new Date(), new Date(), textoMinuta, tipoMinuta, false, "", "");
     }
 
