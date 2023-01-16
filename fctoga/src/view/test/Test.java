@@ -47,8 +47,8 @@ public class Test {
         // Adiciona-os ao frame.
         for (int i = 0; i < botoesLabel.length; i++) {
             JButton botao = new JButton(botoesLabel[i]);
-            int finalI = i;
-            botao.addActionListener(e -> botoesAcao[finalI].run());
+            final Runnable acao = botoesAcao[i];
+            botao.addActionListener(e -> acao.run());
             frame.getContentPane().add(botao);
         }
 

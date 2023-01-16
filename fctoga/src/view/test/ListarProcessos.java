@@ -12,7 +12,11 @@ public class ListarProcessos {
         JFrame frame = new JFrame("Lista de Processos");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 900);
+
+        // ==================== Tabela ====================
         JTable table = new JTable();
+        table.setDefaultEditor(Object.class, null);
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         String[] colunas = {"Nome do Requerente", "CPF do Requerente", "Nome do Requerido", "CPF do Requerido", "Data de Abertura", "Status"};
         List<Processo> processos = fc.processos;
         // Listar os processos na JTable
@@ -28,7 +32,27 @@ public class ListarProcessos {
         }).toArray(Object[][]::new);
         table.setModel(new DefaultTableModel(data, colunas));
         JScrollPane scrollPane = new JScrollPane(table);
+        // ==================== Tabela ====================
+
+        // ==================== Botão =====================
+        JButton button = new JButton("Listar anexos");
+        button.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(frame, "Selecione um processo para listar os anexos");
+                return;
+            }
+            Processo p = processos.get(selectedRow);
+            JFrame anexosFrame = ListarAnexos.get(p.visualizarHistoricoProcesso());
+            anexosFrame.setVisible(true);
+        });
+        // ==================== Botão =====================
+
+        // BoxLayout vertical
+        BoxLayout boxLayout = new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS);
+        frame.setLayout(boxLayout);
         frame.getContentPane().add(scrollPane);
+        frame.getContentPane().add(button);
         return frame;
     }
 }
