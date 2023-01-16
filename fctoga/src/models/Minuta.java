@@ -21,6 +21,14 @@ public class Minuta extends Anexo {
         this.comarcaJuiz = comarcaJuiz;
     }
 
+    public String getTextoMinuta() {
+        return textoMinuta;
+    }
+
+    public void setTextoMinuta(String textoMinuta) {
+        this.textoMinuta = textoMinuta;
+    }
+
     public String getTipoMinuta() {
         return tipoMinuta;
     }

@@ -1,7 +1,6 @@
 package controllers;
 
 import models.Anexo;
-import models.Minuta;
 import models.Processo;
 import utils.NotImplemented;
 
@@ -26,6 +25,7 @@ public class ControladorProcesso {
         this.anexo = anexo;
     }
 
+    // Métodos
     public void adicionarMinuta(String tipoMinuta, String textoMinuta) {
         this.processo.adicionarMinuta(tipoMinuta, textoMinuta);
     }
@@ -45,22 +45,11 @@ public class ControladorProcesso {
     }
 
     @NotImplemented
-    public Boolean alterarMinuta(String textoMinuta) {
-        return null;
-    }
-
-    @NotImplemented
     public Anexo visualizarAnexoProcesso() {
         return null;
     }
 
+    @NotImplemented
     public void assinarMinuta(String nomeJuiz, String comarcaJuiz) {
-        try {
-            Minuta minutaInstancia = ((Minuta) (this.anexo));
-            minutaInstancia.assinarMinuta(nomeJuiz, comarcaJuiz);
-        }
-        catch (ClassCastException eNaoMinuta) {
-            throw new ClassCastException("Anexo não é uma minuta.");
-        }
     }
 }
