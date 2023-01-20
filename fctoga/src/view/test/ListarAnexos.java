@@ -2,6 +2,7 @@ package view.test;
 
 import models.Anexo;
 import models.Minuta;
+import models.Processo;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -9,7 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 
 public class ListarAnexos {
-    public static JFrame get(ArrayList<Anexo> anexos) {
+    public static JFrame get(Processo processo) {
+        ArrayList<Anexo> listaAnexos = processo.visualizarHistoricoProcesso();
+
         JFrame frame = new JFrame("Listar Anexos");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 900);
@@ -21,7 +24,7 @@ public class ListarAnexos {
         AbstractTableModel model = new DefaultTableModel(colunas, 0) {
             @Override
             public int getRowCount() {
-                return anexos.size();
+                return listaAnexos.size();
             }
 
             @Override
@@ -32,11 +35,11 @@ public class ListarAnexos {
             @Override
             public Object getValueAt(int rowIndex, int columnIndex) {
                 return switch (columnIndex) {
-                    case 0 -> anexos.get(rowIndex).getDataCriacao();
-                    case 1 -> anexos.get(rowIndex).getDataUltimaModificacao();
-                    case 2 -> anexos.get(rowIndex) instanceof Minuta ? "Minuta" : "Petição";
+                    case 0 -> listaAnexos.get(rowIndex).getDataCriacao();
+                    case 1 -> listaAnexos.get(rowIndex).getDataUltimaModificacao();
+                    case 2 -> listaAnexos.get(rowIndex) instanceof Minuta ? "Minuta" : "Petição";
                     case 3 ->
-                            anexos.get(rowIndex) instanceof Minuta ? (((Minuta) anexos.get(rowIndex)).getAssinada() ? "Assinada" : "Não assinada") : "N/A";
+                            listaAnexos.get(rowIndex) instanceof Minuta ? (((Minuta) listaAnexos.get(rowIndex)).getAssinada() ? "Assinada" : "Não assinada") : "N/A";
                     default -> null;
                 };
             }
@@ -46,6 +49,27 @@ public class ListarAnexos {
         JScrollPane scrollPane = new JScrollPane(table);
         // ========== Tabela ==========
 
+        // Botão de adicionar anexo
+        JButton adicionarAnexo = new JButton("Adicionar");
+        adicionarAnexo.addActionListener(e -> {
+            JFrame frameAdicionarAnexo = null;
+            int tipo = AdicionarAnexo.selecionaTipo();
+            if (tipo == 0) {
+                frameAdicionarAnexo = AdicionarAnexo.getAdicionarMinuta(processo);
+            } else if (tipo == 1) {
+                frameAdicionarAnexo = AdicionarAnexo.getAdicionarPeticao(processo);
+
+            }
+            frameAdicionarAnexo.setVisible(true);
+            // Ao fechar frame, atualiza tabela
+            frameAdicionarAnexo.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosed(java.awt.event.WindowEvent windowEvent) {
+                    model.fireTableDataChanged();
+                }
+            });
+        });
+
         // Botão de editar
         JButton editar = new JButton("Editar");
         editar.addActionListener(e -> {
@@ -54,7 +78,7 @@ public class ListarAnexos {
                 JOptionPane.showMessageDialog(frame, "Selecione um anexo para editar");
                 return;
             }
-            Anexo anexo = anexos.get(row);
+            Anexo anexo = listaAnexos.get(row);
             if (anexo instanceof Minuta) {
                 JFrame frameAlterarMinuta = AlterarMinuta.get((Minuta) (anexo));
                 frameAlterarMinuta.setVisible(true);
@@ -76,7 +100,7 @@ public class ListarAnexos {
                 JOptionPane.showMessageDialog(frame, "Selecione uma minuta para assinar");
                 return;
             }
-            Anexo anexo = anexos.get(row);
+            Anexo anexo = listaAnexos.get(row);
             if (anexo instanceof Minuta) {
                 // Dialog para confirmar assinatura
                 int dialogResult = JOptionPane.showConfirmDialog(frame, "Tem certeza que deseja assinar esta minuta?", "Assinar minuta", JOptionPane.YES_NO_OPTION);
@@ -92,6 +116,7 @@ public class ListarAnexos {
         // BoxLayout horizontal para os botões
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+        buttonsPanel.add(adicionarAnexo);
         buttonsPanel.add(editar);
         buttonsPanel.add(assinar);
 

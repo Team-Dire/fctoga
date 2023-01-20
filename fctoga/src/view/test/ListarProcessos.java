@@ -43,7 +43,7 @@ public class ListarProcessos {
                 return;
             }
             Processo p = processos.get(selectedRow);
-            JFrame anexosFrame = ListarAnexos.get(p.visualizarHistoricoProcesso());
+            JFrame anexosFrame = ListarAnexos.get(p);
             anexosFrame.setVisible(true);
         });
         // ==================== Botão =====================
