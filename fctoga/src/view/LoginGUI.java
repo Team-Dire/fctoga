@@ -32,7 +32,7 @@ public class LoginGUI {
                 FCToga.getInstance().autenticarUsuario(cpfField.getText(), senhaField.getText());
                 JOptionPane.showMessageDialog(frame, "Login realizado com sucesso!");
                 frame.dispose();
-                JFrame frameMenuPrincipal = MenuPrincipal.MenuPrincipal();
+                JFrame frameMenuPrincipal = MenuPrincipal.render();
                 frameMenuPrincipal.setVisible(true);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Erro ao realizar login: " + ex.getMessage());
