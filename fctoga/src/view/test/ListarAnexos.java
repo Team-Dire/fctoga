@@ -16,7 +16,7 @@ public class ListarAnexos {
 
         // ========== Tabela ==========
         JTable table = new JTable();
-        String[] colunas = {"Data de criação", "Data de última modificação", "Tipo"};
+        String[] colunas = {"Data de criação", "Data de última modificação", "Tipo", "Assinada"};
 
         AbstractTableModel model = new DefaultTableModel(colunas, 0) {
             @Override
@@ -35,6 +35,8 @@ public class ListarAnexos {
                     case 0 -> anexos.get(rowIndex).getDataCriacao();
                     case 1 -> anexos.get(rowIndex).getDataUltimaModificacao();
                     case 2 -> anexos.get(rowIndex) instanceof Minuta ? "Minuta" : "Petição";
+                    case 3 ->
+                            anexos.get(rowIndex) instanceof Minuta ? (((Minuta) anexos.get(rowIndex)).getAssinada() ? "Assinada" : "Não assinada") : "N/A";
                     default -> null;
                 };
             }
@@ -54,7 +56,7 @@ public class ListarAnexos {
             }
             Anexo anexo = anexos.get(row);
             if (anexo instanceof Minuta) {
-                JFrame frameAlterarMinuta = AlterarMinuta.get((Minuta)(anexo));
+                JFrame frameAlterarMinuta = AlterarMinuta.get((Minuta) (anexo));
                 frameAlterarMinuta.setVisible(true);
                 // Event listener para atualizar a tabela quando a minuta for alterada
                 frameAlterarMinuta.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -66,10 +68,37 @@ public class ListarAnexos {
             }
         });
 
-        // BoxLayout vertical
+        // Botão de assinar (minuta)
+        JButton assinar = new JButton("Assinar");
+        assinar.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(frame, "Selecione uma minuta para assinar");
+                return;
+            }
+            Anexo anexo = anexos.get(row);
+            if (anexo instanceof Minuta) {
+                // Dialog para confirmar assinatura
+                int dialogResult = JOptionPane.showConfirmDialog(frame, "Tem certeza que deseja assinar esta minuta?", "Assinar minuta", JOptionPane.YES_NO_OPTION);
+                if (dialogResult == JOptionPane.YES_OPTION) {
+                    // TODO como recuperar usuário atual? Provavelmente irá afetar a lógica inteira
+                    ((Minuta) anexo).assinarMinuta("NOME_PADRAO_JUIZ", "NOME_PADRAO_VARA");
+                    model.fireTableRowsUpdated(row, row);
+                }
+            }
+        });
+
+
+        // BoxLayout horizontal para os botões
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+        buttonsPanel.add(editar);
+        buttonsPanel.add(assinar);
+
+        // BoxLayout vertical para o Frame
         frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
         frame.getContentPane().add(scrollPane);
-        frame.getContentPane().add(editar);
+        frame.getContentPane().add(buttonsPanel);
         return frame;
     }
 }

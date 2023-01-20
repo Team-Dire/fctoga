@@ -67,6 +67,7 @@ public class Minuta extends Anexo {
             return false;
         }
         this.textoMinuta = textoMinuta;
+        this.setDataUltimaModificacao(new Date());
         return true;
     }
 
