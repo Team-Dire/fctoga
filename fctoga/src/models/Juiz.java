@@ -5,7 +5,7 @@ public class Juiz extends Usuario {
 
     // region Boilerplate
     public Juiz(String CPF, String nomeCompleto, String senha, String comarca) {
-        super(CPF, nomeCompleto, senha);
+        super(CPF, nomeCompleto, senha, "Juiz");
         this.comarca = comarca;
     }
 

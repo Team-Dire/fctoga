@@ -22,7 +22,6 @@ public class Peticao extends Anexo {
     //endregion
 
     static public Peticao criarPeticao(String textoPeticao) {
-        Peticao peticao = new Peticao(new Date(), new Date(), textoPeticao);
-        return peticao;
+        return new Peticao(new Date(), new Date(), textoPeticao);
     }
 }

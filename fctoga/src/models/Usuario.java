@@ -6,13 +6,15 @@ public class Usuario implements Serializable {
     private String CPF;
     private String nomeCompleto;
     private String senha;
+    private final String tipoUsuario;
 
     // Construtores, getters e setters.
     // region Boilerplate
-    public Usuario(String CPF, String nomeCompleto, String senha) {
+    public Usuario(String CPF, String nomeCompleto, String senha, String tipoUsuario) {
         this.CPF = CPF;
         this.nomeCompleto = nomeCompleto;
         this.senha = senha;
+        this.tipoUsuario = tipoUsuario;
     }
 
     public String getCPF() {
@@ -37,6 +39,10 @@ public class Usuario implements Serializable {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getTipoUsuario() {
+        return tipoUsuario;
     }
     //endregion
 

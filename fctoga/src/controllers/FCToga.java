@@ -19,6 +19,10 @@ public class FCToga implements Serializable {
     private Usuario usuarioLogado;
     public final List<Processo> processos = new ArrayList<>();
 
+    public List<Usuario> getUsuarios() {
+        return usuarios;
+    }
+
     public String criarUsuario(String CPF, String senha, String nomeCompleto, String tipo, String numeroOAB, String estadoOAB, String comarca) {
         // Primeiro, verifica se usuario já existe.
         if (usuarios.stream().anyMatch(usuario -> usuario.getCPF().equals(CPF))) {
@@ -28,6 +32,7 @@ public class FCToga implements Serializable {
         try {
             Usuario instanciaUsuario = FactoryUsuario.createUsuario(tipo, CPF, nomeCompleto, senha, comarca, numeroOAB, estadoOAB);
             this.usuarios.add(instanciaUsuario);
+            FCToga.serializeInstance();
         } catch (Exception eCriacaoUsuario) {
             return "Erro ao criar usuário: " + eCriacaoUsuario.getMessage();
         }
