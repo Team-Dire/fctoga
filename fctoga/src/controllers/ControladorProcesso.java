@@ -13,8 +13,8 @@ public class ControladorProcesso {
     private Anexo anexo;
 
     // Injeção de dependência.
-    public ControladorProcesso(FCToga fctoga) {
-        this.fctoga = fctoga;
+    public ControladorProcesso() {
+        this.fctoga = FCToga.getInstance();
     }
 
     public void setProcesso(Processo processo) {

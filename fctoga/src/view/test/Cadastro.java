@@ -7,7 +7,7 @@ import javax.swing.text.NumberFormatter;
 import java.text.NumberFormat;
 
 public class Cadastro {
-    public static JFrame get(FCToga fc) {
+    public static JFrame get() {
         JFrame frame = new JFrame("Cadastro");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(300, 600);
@@ -77,7 +77,7 @@ public class Cadastro {
         // Botão que chama o método de cadastro
         JButton cadastrarButton = new JButton("Cadastrar");
         cadastrarButton.addActionListener(e -> {
-            JOptionPane.showMessageDialog(null, fc.criarUsuario(
+            JOptionPane.showMessageDialog(null, FCToga.getInstance().criarUsuario(
                     cpfField.getText(),
                     senhaField.getText(),
                     nomeField.getText(),

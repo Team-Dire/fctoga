@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CriarProcesso {
-    public static JFrame get(FCToga fc) {
+    public static JFrame get() {
         JFrame frame = new JFrame("Criar Processo");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(300, 400);
@@ -26,7 +26,7 @@ public class CriarProcesso {
         // Botão para criar o processo
         JButton criarProcessoButton = new JButton("Criar Processo");
         criarProcessoButton.addActionListener(e -> {
-            ControladorProcesso cp = new ControladorProcesso(fc);
+            ControladorProcesso cp = new ControladorProcesso();
             boolean sucesso = false;
             try {
                 cp.novoProcesso(

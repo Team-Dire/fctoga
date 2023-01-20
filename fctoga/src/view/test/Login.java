@@ -7,7 +7,7 @@ import javax.swing.text.NumberFormatter;
 import java.text.NumberFormat;
 
 public class Login {
-    public static JFrame get(FCToga fc) {
+    public static JFrame get() {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(300, 400);
@@ -29,7 +29,7 @@ public class Login {
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(e -> {
             try {
-                fc.autenticarUsuario(cpfField.getText(), senhaField.getText());
+                FCToga.getInstance().autenticarUsuario(cpfField.getText(), senhaField.getText());
                 JOptionPane.showMessageDialog(frame, "Login realizado com sucesso!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(frame, "Erro ao realizar login: " + ex.getMessage());

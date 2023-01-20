@@ -14,8 +14,9 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 public class FCToga implements Serializable {
-    // private final Database db = new Database();
+    private static FCToga instance;
     private final List<Usuario> usuarios = new ArrayList<>();
+    private Usuario usuarioLogado;
     public final List<Processo> processos = new ArrayList<>();
 
     public String criarUsuario(String CPF, String senha, String nomeCompleto, String tipo, String numeroOAB, String estadoOAB, String comarca) {
@@ -46,15 +47,29 @@ public class FCToga implements Serializable {
         } catch (NoSuchElementException eUsuarioNaoExiste) {
             throw new NoSuchElementException("Usuário com esse CPF não existe.");
         }
-        if (instanciaUsuario.getSenha().equals(senha)) return instanciaUsuario;
+        if (instanciaUsuario.getSenha().equals(senha)) {
+            this.usuarioLogado = instanciaUsuario;
+            return instanciaUsuario;
+        }
         else throw new IllegalArgumentException("Senha incorreta.");
     }
 
-    public static void serializeInstance(FCToga fc) {
+    public Usuario getUsuarioLogado() {
+        return this.usuarioLogado;
+    }
+
+    public static FCToga getInstance() {
+        if (instance == null) {
+            instance = FCToga.loadSerializedInstance();
+        }
+        return instance;
+    }
+
+    public static void serializeInstance() {
         try {
             FileOutputStream fileOut = new FileOutputStream("fctoga.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(fc);
+            out.writeObject(FCToga.instance);
             out.close();
             fileOut.close();
         } catch (IOException i) {

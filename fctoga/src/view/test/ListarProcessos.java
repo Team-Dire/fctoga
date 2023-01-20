@@ -8,7 +8,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
 public class ListarProcessos {
-    public static JFrame get(FCToga fc) {
+    public static JFrame get() {
         JFrame frame = new JFrame("Lista de Processos");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(400, 900);
@@ -18,7 +18,7 @@ public class ListarProcessos {
         table.setDefaultEditor(Object.class, null);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         String[] colunas = {"Nome do Requerente", "CPF do Requerente", "Nome do Requerido", "CPF do Requerido", "Data de Abertura", "Status"};
-        List<Processo> processos = fc.processos;
+        List<Processo> processos = FCToga.getInstance().processos;
         // Listar os processos na JTable
         Object[][] data = processos.stream().map(p -> {
             Object[] row = new Object[6];

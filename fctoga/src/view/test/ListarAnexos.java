@@ -1,8 +1,7 @@
 package view.test;
 
-import models.Anexo;
-import models.Minuta;
-import models.Processo;
+import controllers.FCToga;
+import models.*;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -70,6 +69,24 @@ public class ListarAnexos {
             });
         });
 
+        // Botão de visualizar anexo
+        JButton visualizarAnexo = new JButton("Visualizar");
+        visualizarAnexo.addActionListener(e -> {
+            int row = table.getSelectedRow();
+            if (row == -1) {
+                JOptionPane.showMessageDialog(frame, "Selecione um anexo para visualizar");
+                return;
+            }
+            Anexo anexo = listaAnexos.get(row);
+            if (anexo instanceof Minuta) {
+                JFrame frameVisualizarMinuta = VisualizarAnexo.visualizarMinuta((Minuta) anexo);
+                frameVisualizarMinuta.setVisible(true);
+            } else if (anexo instanceof Peticao) {
+                JFrame frameVisualizarPeticao = VisualizarAnexo.visualizarPeticao((Peticao) anexo);
+                frameVisualizarPeticao.setVisible(true);
+            }
+        });
+
         // Botão de editar
         JButton editar = new JButton("Editar");
         editar.addActionListener(e -> {
@@ -105,8 +122,13 @@ public class ListarAnexos {
                 // Dialog para confirmar assinatura
                 int dialogResult = JOptionPane.showConfirmDialog(frame, "Tem certeza que deseja assinar esta minuta?", "Assinar minuta", JOptionPane.YES_NO_OPTION);
                 if (dialogResult == JOptionPane.YES_OPTION) {
-                    // TODO como recuperar usuário atual? Provavelmente irá afetar a lógica inteira
-                    ((Minuta) anexo).assinarMinuta("NOME_PADRAO_JUIZ", "NOME_PADRAO_VARA");
+                    Usuario usuario = FCToga.getInstance().getUsuarioLogado();
+                    if (usuario instanceof Juiz juiz) {
+                        ((Minuta) anexo).assinarMinuta(juiz.getNomeCompleto(), juiz.getComarca());
+                    }
+                    else {
+                        JOptionPane.showMessageDialog(frame, "Apenas juízes podem assinar minutas");
+                    }
                     model.fireTableRowsUpdated(row, row);
                 }
             }
@@ -117,6 +139,7 @@ public class ListarAnexos {
         JPanel buttonsPanel = new JPanel();
         buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
         buttonsPanel.add(adicionarAnexo);
+        buttonsPanel.add(visualizarAnexo);
         buttonsPanel.add(editar);
         buttonsPanel.add(assinar);
 
