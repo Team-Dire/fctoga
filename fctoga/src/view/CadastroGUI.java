@@ -1,11 +1,11 @@
 package view;
 
 import controllers.FCToga;
+import view.utils.CPFInputVerifier;
+import view.utils.NumeroOABInputVerifier;
 
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.text.NumberFormat;
 
 public class CadastroGUI {
     private static final String[] TIPOS = {"Administrador", "Advogado", "Diretor", "Juiz", "Promotor"};
@@ -43,14 +43,10 @@ public class CadastroGUI {
         estadoOABBox.add(estadoOABLabel);
         estadoOABBox.add(estadoOAB);
 
-        // ===== CPF/CNPJ =====
-        NumberFormat format = NumberFormat.getInstance();
-        format.setGroupingUsed(false);
-        NumberFormatter numberFormatter = new NumberFormatter(format);
-        numberFormatter.setValueClass(Long.class);
-        numberFormatter.setAllowsInvalid(false);
-        JLabel cpfLabel = new JLabel("CPF/CNPJ:");
-        JFormattedTextField cpfField = new JFormattedTextField(numberFormatter);
+        // ===== CPF =====
+        JLabel cpfLabel = new JLabel("CPF:");
+        JTextField cpfField = new JTextField(11);
+        cpfField.setInputVerifier(new CPFInputVerifier());
         Box cpfBox = Box.createHorizontalBox();
         cpfBox.add(cpfLabel);
         cpfBox.add(cpfField);
@@ -78,7 +74,8 @@ public class CadastroGUI {
 
         // ===== NUMERO OAB =====
         JLabel numeroOABLabel = new JLabel("Número OAB:");
-        JFormattedTextField numeroOABField = new JFormattedTextField(numberFormatter);
+        JTextField numeroOABField = new JTextField(6);
+        numeroOABField.setInputVerifier(new NumeroOABInputVerifier());
         Box numeroOABBox = Box.createHorizontalBox();
         numeroOABBox.add(numeroOABLabel);
         numeroOABBox.add(numeroOABField);
@@ -127,23 +124,23 @@ public class CadastroGUI {
         // Componentes do frame ficarão em um box vertical
         Box verticalBox = Box.createVerticalBox();
         // Adicionando na seguinte ordem: Tipo, CPF, Nome, Senha, Comarca, Número OAB e Estado OAB
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
         verticalBox.add(tipoUsuarioBox);
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
         verticalBox.add(cpfBox);
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
         verticalBox.add(nomeBox);
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
         verticalBox.add(senhaBox);
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
         verticalBox.add(comarcaBox);
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
         verticalBox.add(numeroOABBox);
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
         verticalBox.add(estadoOABBox);
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
         verticalBox.add(cadastrarButton);
-        verticalBox.add(Box.createRigidArea(new Dimension(0, 10)));
+        verticalBox.add(Box.createVerticalStrut(10));
 
         frame.getContentPane().add(verticalBox, BorderLayout.CENTER);
         return frame;

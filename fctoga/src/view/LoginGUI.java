@@ -1,10 +1,9 @@
 package view;
 
 import controllers.FCToga;
+import view.utils.CPFInputVerifier;
 
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
-import java.text.NumberFormat;
 
 public class LoginGUI {
     public static JFrame TelaLogin() {
@@ -14,16 +13,16 @@ public class LoginGUI {
 
         // Label e TextField para cada um dos atributos:
         // CPF, Senha
-        NumberFormat format = NumberFormat.getInstance();
-        format.setGroupingUsed(false);
-        NumberFormatter numberFormatter = new NumberFormatter(format);
-        numberFormatter.setValueClass(Long.class);
-        numberFormatter.setAllowsInvalid(false);
-        // Senha é um JPasswordField
         JLabel cpfLabel = new JLabel("CPF:");
-        JFormattedTextField cpfField = new JFormattedTextField(numberFormatter);
+        JTextField cpfField = new JTextField(14);
+        cpfField.setInputVerifier(new CPFInputVerifier());
+        Box cpfBox = Box.createHorizontalBox();
+        cpfBox.add(cpfLabel); cpfBox.add(cpfField);
+
         JLabel senhaLabel = new JLabel("Senha:");
         JPasswordField senhaField = new JPasswordField();
+        Box senhaBox = Box.createHorizontalBox();
+        senhaBox.add(senhaLabel); senhaBox.add(senhaField);
 
         // Botão que chama o método de login
         JButton loginButton = new JButton("Login");
@@ -38,15 +37,19 @@ public class LoginGUI {
                 JOptionPane.showMessageDialog(frame, "Erro ao realizar login: " + ex.getMessage());
             }
         });
+        Box loginButtonBox = Box.createHorizontalBox(); loginButtonBox.add(loginButton);
 
-        frame.getContentPane().add(cpfLabel);
-        frame.getContentPane().add(cpfField);
-        frame.getContentPane().add(senhaLabel);
-        frame.getContentPane().add(senhaField);
-        frame.getContentPane().add(loginButton);
+        Box frameBox = Box.createVerticalBox();
+        frameBox.add(Box.createVerticalStrut(10));
+        frameBox.add(cpfBox);
+        frameBox.add(Box.createVerticalStrut(10));
+        frameBox.add(senhaBox);
+        frameBox.add(Box.createVerticalStrut(10));
+        frameBox.add(loginButtonBox);
+        frameBox.add(Box.createVerticalStrut(10));
 
         // Layout é Box Layout com eixo vertical
-        frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+        frame.getContentPane().add(frameBox);
         return frame;
     }
 }
