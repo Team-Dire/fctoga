@@ -1,5 +1,6 @@
 package view.anexos;
 
+import controllers.FCToga;
 import models.Minuta;
 
 import javax.swing.*;
@@ -32,6 +33,7 @@ public class EditarMinuta {
         salvar.addActionListener(e -> {
             boolean minutaAlterada = instanciaMinuta.alterarMinuta(textoMinuta.getText());
             if (minutaAlterada) {
+                FCToga.serializeInstance();
                 JOptionPane.showMessageDialog(frame, "Minuta alterada com sucesso");
                 frame.dispose();
             } else {

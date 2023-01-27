@@ -103,7 +103,7 @@ public class Processo implements Serializable {
     }
 
     public void adicionarPeticao(String textoPeticao) {
-        Peticao peticao = Peticao.criarPeticao(textoPeticao);
+        Anexo peticao = Peticao.criarPeticao(textoPeticao);
         anexos.add(peticao);
     }
 

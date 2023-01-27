@@ -3,6 +3,8 @@ package view.anexos;
 import models.Minuta;
 
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VisualizarMinuta {
     private final static String[] LABELS = {"Data de criação", "Data de última modificação", "Tipo da minuta", "Texto da minuta"};
@@ -14,10 +16,10 @@ public class VisualizarMinuta {
 
         JLabel[] labels = new JLabel[LABELS.length + 2];
         JTextField[] conteudos = new JTextField[LABELS.length + 2];
-        Box[] horizontalBoxes = new Box[LABELS.length + 2];
+        List<Box> horizontalBoxes = new ArrayList<Box>();
 
         for (int i = 0; i < LABELS.length; i++) {
-            horizontalBoxes[i] = Box.createHorizontalBox();
+            Box horizontalBox = Box.createHorizontalBox();
             labels[i] = new JLabel(LABELS[i]);
             conteudos[i] = new JTextField();
             conteudos[i].setEditable(false);
@@ -25,8 +27,9 @@ public class VisualizarMinuta {
             conteudos[i].setOpaque(false);
             conteudos[i].setFocusable(false);
             conteudos[i].setColumns(30);
-            horizontalBoxes[i].add(labels[i]);
-            horizontalBoxes[i].add(conteudos[i]);
+            horizontalBox.add(labels[i]);
+            horizontalBox.add(conteudos[i]);
+            horizontalBoxes.add(horizontalBox);
         }
 
         conteudos[0].setText(minuta.getDataCriacao().toString());
@@ -43,9 +46,10 @@ public class VisualizarMinuta {
             conteudos[LABELS.length + 1].setFocusable(false);
             conteudos[LABELS.length + 1].setColumns(30);
             conteudos[LABELS.length + 1].setText("Sim");
-            horizontalBoxes[LABELS.length + 1] = Box.createHorizontalBox();
-            horizontalBoxes[LABELS.length + 1].add(labels[LABELS.length + 1]);
-            horizontalBoxes[LABELS.length + 1].add(conteudos[LABELS.length + 1]);
+            Box horizontalBox = Box.createHorizontalBox();
+            horizontalBox.add(labels[LABELS.length + 1]);
+            horizontalBox.add(conteudos[LABELS.length + 1]);
+            horizontalBoxes.add(horizontalBox);
 
             labels[LABELS.length + 2] = new JLabel("Assinatura");
             conteudos[LABELS.length + 2] = new JTextField();
@@ -55,9 +59,10 @@ public class VisualizarMinuta {
             conteudos[LABELS.length + 2].setFocusable(false);
             conteudos[LABELS.length + 2].setColumns(30);
             conteudos[LABELS.length + 2].setText(minuta.getNomeJuiz() + " - " + minuta.getComarcaJuiz());
-            horizontalBoxes[LABELS.length + 2] = Box.createHorizontalBox();
-            horizontalBoxes[LABELS.length + 2].add(labels[LABELS.length + 2]);
-            horizontalBoxes[LABELS.length + 2].add(conteudos[LABELS.length + 2]);
+            horizontalBox = Box.createHorizontalBox();
+            horizontalBox.add(labels[LABELS.length + 2]);
+            horizontalBox.add(conteudos[LABELS.length + 2]);
+            horizontalBoxes.add(horizontalBox);
         }
 
         // Box Layout vertical
@@ -69,6 +74,7 @@ public class VisualizarMinuta {
             verticalBox.add(horizontalBox);
         }
 
+        frame.getContentPane().add(verticalBox);
         return frame;
     }
 }

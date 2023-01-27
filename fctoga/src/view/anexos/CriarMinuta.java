@@ -1,5 +1,6 @@
 package view.anexos;
 
+import controllers.FCToga;
 import models.Processo;
 
 import javax.swing.*;
@@ -32,6 +33,7 @@ public class CriarMinuta {
 
             // Adiciona minuta
             processo.adicionarMinuta(textFields[0].getText(), textFields[1].getText());
+            FCToga.serializeInstance();
             JOptionPane.showMessageDialog(frame, "Minuta adicionada com sucesso");
             frame.dispose();
         });

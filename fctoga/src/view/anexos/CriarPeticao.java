@@ -1,5 +1,6 @@
 package view.anexos;
 
+import controllers.FCToga;
 import models.Processo;
 
 import javax.swing.*;
@@ -32,6 +33,7 @@ public class CriarPeticao {
 
             // Adiciona petição
             processo.adicionarPeticao(textFields[0].getText());
+            FCToga.serializeInstance();
             JOptionPane.showMessageDialog(frame, "Petição adicionada com sucesso");
             frame.dispose();
         });
