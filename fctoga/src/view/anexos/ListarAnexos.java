@@ -21,7 +21,7 @@ public class ListarAnexos {
 
     public static JFrame render(Processo processo) {
 
-        ArrayList<Anexo> listaAnexos = processo.visualizarHistoricoProcesso();
+        ArrayList<Anexo> listaAnexos = processo.getAnexos();
 
         JFrame frame = new JFrame("Listar Anexos");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

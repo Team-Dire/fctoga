@@ -1,5 +1,7 @@
 package models;
 
+import controllers.FCToga;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,93 +16,95 @@ public class Processo implements Serializable {
     private String numeroProcesso;
     private Date dataCriacao;
     private final ArrayList<Anexo> anexos;
+    private final Usuario representante;
 
     // Construtores, getters e setters
     // region Boilerplate
-    public Processo(String nomeRequerente, String CPF_CNPJ_Requerente, String nomeRequerido, String CPF_CNPJ_Requerido, String tipoProceso, Boolean fechado, String numeroProcesso, Date dataCriacao) {
-        this.nomeRequerente = nomeRequerente;
-        this.CPF_CNPJ_Requerente = CPF_CNPJ_Requerente;
-        this.nomeRequerido = nomeRequerido;
-        this.CPF_CNPJ_Requerido = CPF_CNPJ_Requerido;
-        this.tipoProceso = tipoProceso;
-        this.fechado = fechado;
-        this.numeroProcesso = numeroProcesso;
-        this.dataCriacao = dataCriacao;
+    public Processo() {
         this.anexos = new ArrayList<>();
+        this.representante = FCToga.getInstance().getUsuarioLogado();
     }
 
     public String getNomeRequerente() {
         return nomeRequerente;
     }
 
-    public void setNomeRequerente(String nomeRequerente) {
+    public Processo setNomeRequerente(String nomeRequerente) {
         this.nomeRequerente = nomeRequerente;
+        return this;
     }
 
     public String getCPF_CNPJ_Requerente() {
         return CPF_CNPJ_Requerente;
     }
 
-    public void setCPF_CNPJ_Requerente(String CPF_CNPJ_Requerente) {
+    public Processo setCPF_CNPJ_Requerente(String CPF_CNPJ_Requerente) {
         this.CPF_CNPJ_Requerente = CPF_CNPJ_Requerente;
+        return this;
     }
 
     public String getNomeRequerido() {
         return nomeRequerido;
     }
 
-    public void setNomeRequerido(String nomeRequerido) {
+    public Processo setNomeRequerido(String nomeRequerido) {
         this.nomeRequerido = nomeRequerido;
+        return this;
     }
 
     public String getCPF_CNPJ_Requerido() {
         return CPF_CNPJ_Requerido;
     }
 
-    public void setCPF_CNPJ_Requerido(String CPF_CNPJ_Requerido) {
+    public Processo setCPF_CNPJ_Requerido(String CPF_CNPJ_Requerido) {
         this.CPF_CNPJ_Requerido = CPF_CNPJ_Requerido;
+        return this;
     }
 
     public String getTipoProceso() {
         return tipoProceso;
     }
 
-    public void setTipoProceso(String tipoProceso) {
+    public Processo setTipoProceso(String tipoProceso) {
         this.tipoProceso = tipoProceso;
+        return this;
     }
 
     public Boolean getFechado() {
         return fechado;
     }
 
-    public void setFechado(Boolean fechado) {
+    public Processo setFechado(Boolean fechado) {
         this.fechado = fechado;
+        return this;
     }
 
     public String getNumeroProcesso() {
         return numeroProcesso;
     }
 
-    public void setNumeroProcesso(String numeroProcesso) {
+    public Processo setNumeroProcesso(String numeroProcesso) {
         this.numeroProcesso = numeroProcesso;
+        return this;
     }
 
     public Date getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(Date dataCriacao) {
+    public Processo setDataCriacao(Date dataCriacao) {
         this.dataCriacao = dataCriacao;
+        return this;
     }
-    //endregion
 
-    public ArrayList<Anexo> visualizarHistoricoProcesso() {
+    public ArrayList<Anexo> getAnexos() {
         return anexos;
     }
 
-    public static Processo criarProcesso(String CPF_CNPJ_Requerente, String nomeRequerente, String CPF_CNPJ_Requerido, String nomeRequerido) {
-        return new Processo(nomeRequerente, CPF_CNPJ_Requerente, nomeRequerido, CPF_CNPJ_Requerido, "Processo", false, "00000000000000000000", new Date());
+    public Usuario getRepresentante() {
+        return representante;
     }
+    //endregion
 
     public void adicionarPeticao(String textoPeticao) {
         Anexo peticao = Peticao.criarPeticao(textoPeticao);
@@ -112,7 +116,13 @@ public class Processo implements Serializable {
         anexos.add(minuta);
     }
 
-    public void fecharProcesso() {
-        this.fechado = true;
+    public static String numeroProcessoFromData(Date data) {
+        return String.format("%02d%02d%02d%02d%02d42%04d0022112",
+                data.getDate(),
+                data.getMonth(),
+                data.getHours(),
+                data.getMinutes(),
+                data.getSeconds(),
+                data.getYear());
     }
 }
