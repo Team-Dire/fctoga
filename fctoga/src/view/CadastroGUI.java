@@ -6,6 +6,7 @@ import view.utils.NumeroOABInputVerifier;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 
 public class CadastroGUI {
     private static final String[] TIPOS = {"Administrador", "Advogado", "Diretor", "Juiz", "Promotor"};
@@ -17,7 +18,7 @@ public class CadastroGUI {
             "SP", "SE", "TO"
     };
 
-    public static JFrame get() {
+    public static JFrame render(boolean permitirApenasAdministrador) {
         JFrame frame = new JFrame("Cadastro");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(300, 600);
@@ -26,8 +27,11 @@ public class CadastroGUI {
         JLabel tipoUsuarioLabel = new JLabel("Tipo de usuário:");
         JComboBox<String> tipoUsuario = new JComboBox<>();
 
-        for (String tipo : TIPOS)
-            tipoUsuario.addItem(tipo);
+        if (permitirApenasAdministrador) {
+            tipoUsuario.addItem(TIPOS[0]);
+        } else {
+            Arrays.stream(TIPOS).forEach(tipoUsuario::addItem);
+        }
 
         Box tipoUsuarioBox = Box.createHorizontalBox();
         tipoUsuarioBox.add(tipoUsuarioLabel);

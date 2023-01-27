@@ -9,11 +9,11 @@ public class Main {
         // Verifica se há usuários cadastrados
         if (FCToga.getInstance().getUsuarios().isEmpty()) {
             // Se não houver, abre a tela de cadastro
-            JFrame frameCadastro = CadastroGUI.get();
+            JFrame frameCadastro = CadastroGUI.render(true);
             frameCadastro.setVisible(true);
         } else {
             // Se houver, abre a tela de login
-            JFrame frame = LoginGUI.TelaLogin();
+            JFrame frame = LoginGUI.render();
             frame.setVisible(true);
         }
     }

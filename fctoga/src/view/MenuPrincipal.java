@@ -11,7 +11,7 @@ public class MenuPrincipal {
     private final static String[] botoesLabel = {"Cadastrar usuário", "Listar Processos"};
     private final static Runnable[] botoesAcao = {
             () -> {
-                JFrame frame = CadastroGUI.get();
+                JFrame frame = CadastroGUI.render(false);
                 frame.setVisible(true);
             },
             () -> {

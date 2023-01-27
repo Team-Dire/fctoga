@@ -6,7 +6,7 @@ import view.utils.CPFInputVerifier;
 import javax.swing.*;
 
 public class LoginGUI {
-    public static JFrame TelaLogin() {
+    public static JFrame render() {
         JFrame frame = new JFrame("Login");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(300, 400);
