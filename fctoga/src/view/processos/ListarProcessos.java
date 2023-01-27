@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ListarProcessos {
-    private final static String[] COLUNAS = {"Nome do Requerente", "CPF do Requerente", "Nome do Requerido", "CPF do Requerido", "Data de Abertura", "Status"};
+    private final static String[] COLUNAS = {"Nome do Requerente", "CPF/CNPJ do Requerente", "Nome do Requerido", "CPF/CNPJ do Requerido", "Data de Abertura", "Status"};
 
     private final static Map<String, boolean[]> PERMISSOES_BOTOES = Map.of(
             "Promotor", new boolean[]{true, true},
