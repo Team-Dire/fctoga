@@ -6,7 +6,9 @@ import view.anexos.ListarAnexos;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class ListarProcessos {
@@ -20,7 +22,6 @@ public class ListarProcessos {
     public static JFrame render() {
         JFrame frame = new JFrame("Lista de Processos");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(400, 900);
 
         // ==================== Tabela ====================
         JTable table = new JTable();
@@ -75,7 +76,7 @@ public class ListarProcessos {
         });
 
         // Listar anexos
-        btns[1] = new JButton("Listar anexos");
+        btns[1] = new JButton("Visualizar histórico");
         btns[1].addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow == -1) {
@@ -89,19 +90,26 @@ public class ListarProcessos {
 
         String tipoUsuarioLogado = FCToga.getInstance().getUsuarioLogado().getTipoUsuario();
         boolean[] botoesPermitidos = PERMISSOES_BOTOES.getOrDefault(tipoUsuarioLogado, new boolean[]{false, true});
-        Box btnsBox = Box.createHorizontalBox();
+        List<JButton> botoesVisiveis = new ArrayList<>();
         for (int i = 0; i < btns.length; i++) {
             if (botoesPermitidos[i])
-                btnsBox.add(btns[i]);
+                botoesVisiveis.add(btns[i]);
         }
         // ==================== Botões =====================
 
-        // BoxLayout vertical
-        Box verticalBox = Box.createVerticalBox();
-        verticalBox.add(scrollPaneTabelaProcessos);
-        verticalBox.add(btnsBox);
-
-        frame.getContentPane().add(verticalBox);
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.insets = new Insets(5, 5, 5, 5);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        // Número de colunas depende do número de botões
+        c.gridwidth = botoesVisiveis.size();
+        c.gridx = 0; c.gridy = 0; frame.add(scrollPaneTabelaProcessos, c);
+        c.gridwidth = 1;
+        for (int i = 0; i < botoesVisiveis.size(); i++) {
+            c.gridx = i; c.gridy = 1; frame.add(botoesVisiveis.get(i), c);
+        }
+        frame.pack();
+        frame.setMinimumSize(frame.getSize());
         return frame;
     }
 }

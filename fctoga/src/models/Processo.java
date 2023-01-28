@@ -119,10 +119,10 @@ public class Processo implements Serializable {
     public static String numeroProcessoFromData(Date data) {
         return String.format("%02d%02d%02d%02d%02d42%04d0022112",
                 data.getDate(),
-                data.getMonth(),
+                data.getMonth() + 1,
                 data.getHours(),
                 data.getMinutes(),
                 data.getSeconds(),
-                data.getYear());
+                data.getYear() + 1900);
     }
 }
