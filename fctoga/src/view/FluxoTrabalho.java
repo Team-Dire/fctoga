@@ -70,7 +70,7 @@ public class FluxoTrabalho {
                 // Tipo de anexo: Despacho, Petição ou Minuta de Sentença
                 String tipoAnexoMaisRecente;
                 if (anexoMaisRecente == null)
-                    tipoAnexoMaisRecente = "Despacho";
+                    tipoAnexoMaisRecente = "Petição";
                 else if (anexoMaisRecente instanceof Minuta)
                     tipoAnexoMaisRecente = String.format("Minuta de %s", ((Minuta) anexoMaisRecente).getTipoMinuta());
                 else

@@ -4,6 +4,7 @@ import controllers.FCToga;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Processo implements Serializable {
@@ -118,7 +119,7 @@ public class Processo implements Serializable {
 
     public Anexo getAnexoModificacaoMaisRecente() {
         return anexos.stream()
-                .max((a1, a2) -> a1.getDataUltimaModificacao().compareTo(a2.getDataUltimaModificacao()))
+                .max(Comparator.comparing(Anexo::getDataUltimaModificacao))
                 .orElse(null);
     }
 

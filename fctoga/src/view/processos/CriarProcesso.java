@@ -95,6 +95,7 @@ public class CriarProcesso {
                             fieldNomeRequerido.getText()
                     );
                     processoCriado.adicionarPeticao(fieldPeticaoInicial.getText());
+                    FCToga.serializeInstance();
                 }
                 else if (tipoUsuarioLogado.equals("Promotor")) {
                     Processo processoCriado = ControladorProcesso.novoProcessoCriminal(
@@ -102,6 +103,7 @@ public class CriarProcesso {
                             fieldNomeRequerido.getText()
                     );
                     processoCriado.adicionarPeticao(fieldPeticaoInicial.getText());
+                    FCToga.serializeInstance();
                 }
                 else {
                     throw new Exception("Usuário não é advogado nem promotor");
