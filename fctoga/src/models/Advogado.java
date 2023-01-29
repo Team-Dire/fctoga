@@ -6,7 +6,7 @@ public class Advogado extends Usuario {
 
     // region Boilerplate
     public Advogado(String CPF, String nomeCompleto, String senha, String numeroOAB, String estadoOAB) {
-        super(CPF, nomeCompleto, senha);
+        super(CPF, nomeCompleto, senha, "Advogado");
         this.numeroOAB = numeroOAB;
         this.estadoOAB = estadoOAB;
     }
