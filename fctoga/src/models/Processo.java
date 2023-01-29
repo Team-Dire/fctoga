@@ -116,6 +116,21 @@ public class Processo implements Serializable {
         anexos.add(minuta);
     }
 
+    public Anexo getAnexoModificacaoMaisRecente() {
+        return anexos.stream()
+                .max((a1, a2) -> a1.getDataUltimaModificacao().compareTo(a2.getDataUltimaModificacao()))
+                .orElse(null);
+    }
+
+    public Date getDataUltimaModificacao() {
+        Date dataUltimaModificacao = dataCriacao;
+        Anexo anexoMaisRecente = getAnexoModificacaoMaisRecente();
+        if (anexoMaisRecente != null) {
+            dataUltimaModificacao = anexoMaisRecente.getDataUltimaModificacao();
+        }
+        return dataUltimaModificacao;
+    }
+
     public static String numeroProcessoFromData(Date data) {
         return String.format("%02d%02d%02d%02d%02d42%04d0022112",
                 data.getDate(),

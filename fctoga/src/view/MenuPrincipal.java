@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 public class MenuPrincipal {
-    private final static String[] botoesLabel = {"Cadastrar usuário", "Listar Processos"};
+    private final static String[] botoesLabel = {"Cadastrar usuário", "Listar Processos", "Fluxo de Trabalho"};
     private final static Runnable[] botoesAcao = {
             () -> {
                 JFrame frame = CadastroGUI.render(false);
@@ -20,11 +20,15 @@ public class MenuPrincipal {
             () -> {
                 JFrame frame = ListarProcessos.render();
                 frame.setVisible(true);
+            },
+            () -> {
+                JFrame frame = FluxoTrabalho.render();
+                frame.setVisible(true);
             }
     };
     // Permissões: administrador vs usuário comum
     private final static Map<String, boolean[]> permissoes = Map.of(
-            "Administrador", new boolean[]{true, true}
+            "Administrador", new boolean[]{true, true, true}
     );
 
     public static JFrame render() {
@@ -35,7 +39,7 @@ public class MenuPrincipal {
         // Adiciona-os ao buttonsBox.
         Usuario usuarioLogado = FCToga.getInstance().getUsuarioLogado();
         String tipoUsuario = usuarioLogado.getTipoUsuario();
-        boolean[] permissoesUsuario = permissoes.getOrDefault(tipoUsuario, new boolean[]{false, true});
+        boolean[] permissoesUsuario = permissoes.getOrDefault(tipoUsuario, new boolean[]{false, true, true});
         // Lista de botões
         List<JButton> botoes = new ArrayList<>();
         for (int i = 0; i < botoesLabel.length; i++) {
