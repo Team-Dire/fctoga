@@ -181,6 +181,7 @@ public class ListarAnexos {
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     Juiz juizLogado = (Juiz) (FCToga.getInstance().getUsuarioLogado());
                     ((Minuta) anexo).assinarMinuta(juizLogado.getNomeCompleto(), juizLogado.getComarca());
+                    FCToga.serializeInstance();
                     JOptionPane.showMessageDialog(frame, "Minuta assinada com sucesso");
                     model.fireTableDataChanged();
                     fluxoTrabalhoModel.fireTableDataChanged();

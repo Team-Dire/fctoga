@@ -44,7 +44,11 @@ public class FluxoTrabalho {
                 if (anexoMaisRecente == null)
                     tipoAnexoMaisRecente = "Petição";
                 else if (anexoMaisRecente instanceof Minuta)
-                    tipoAnexoMaisRecente = String.format("Minuta de %s", ((Minuta) anexoMaisRecente).getTipoMinuta());
+                    // Assinada? Se sim, mostra apenas o tipo
+                    // Se não, exibe "Minuta de " e tipo
+                    tipoAnexoMaisRecente = ((Minuta) anexoMaisRecente).getAssinada() ?
+                            ((Minuta) anexoMaisRecente).getTipoMinuta() :
+                            "Minuta de " + ((Minuta) anexoMaisRecente).getTipoMinuta();
                 else
                     tipoAnexoMaisRecente = "Petição";
                 Date dataUltimaModificacao = atualizaListaProcessos().get(row).getDataUltimaModificacao();
