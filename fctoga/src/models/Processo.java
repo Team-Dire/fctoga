@@ -118,12 +118,17 @@ public class Processo implements Serializable {
     //endregion
 
     public void adicionarPeticao(String textoPeticao) {
-        Anexo peticao = Peticao.criarPeticao(textoPeticao);
+        Anexo peticao = new Peticao()
+                .setAutorPeticao(FCToga.getInstance().getUsuarioLogado())
+                .setTextoPeticao(textoPeticao);
         anexos.add(peticao);
     }
 
     public void adicionarMinuta(String tipoMinuta, String textoMinuta) {
-        Minuta minuta = Minuta.criarMinuta(tipoMinuta, textoMinuta);
+        Minuta minuta = new Minuta()
+                .setTipoMinuta(tipoMinuta)
+                .setTextoMinuta(textoMinuta)
+                .setAutorMinuta(FCToga.getInstance().getUsuarioLogado());
         anexos.add(minuta);
     }
 

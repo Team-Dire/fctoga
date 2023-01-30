@@ -19,12 +19,16 @@ public class CriarMinuta {
         JLabel tipoLabel = new JLabel("Tipo da minuta");
         JComboBox<String> tipoField = new JComboBox<>();
         Arrays.stream(TIPOS_MINUTA).forEach(tipoField::addItem);
-        Box tipoBox = Box.createHorizontalBox(); tipoBox.add(tipoLabel); tipoBox.add(tipoField);
+        Box tipoBox = Box.createHorizontalBox();
+        tipoBox.add(tipoLabel);
+        tipoBox.add(tipoField);
 
         // Texto da minuta
         JLabel textoLabel = new JLabel("Texto da minuta");
         JTextArea textoField = new JTextArea();
-        Box textoBox = Box.createHorizontalBox(); textoBox.add(textoLabel); textoBox.add(textoField);
+        Box textoBox = Box.createHorizontalBox();
+        textoBox.add(textoLabel);
+        textoBox.add(textoField);
 
         // Botão de adicionar
         JButton adicionar = new JButton("Criar minuta");
@@ -45,7 +49,8 @@ public class CriarMinuta {
             JOptionPane.showMessageDialog(frame, "Minuta adicionada com sucesso");
             frame.dispose();
         });
-        Box adicionarBox = Box.createHorizontalBox(); adicionarBox.add(adicionar);
+        Box adicionarBox = Box.createHorizontalBox();
+        adicionarBox.add(adicionar);
 
         // Adiciona componentes ao frame
         // Box layout horizontal para cada campo

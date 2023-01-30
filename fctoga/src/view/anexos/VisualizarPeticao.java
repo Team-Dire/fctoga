@@ -1,30 +1,62 @@
 package view.anexos;
 
+import com.github.rjeschke.txtmark.Processor;
+import models.Advogado;
 import models.Peticao;
+import models.Usuario;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class VisualizarPeticao {
-    public static JFrame render(Peticao peticao) {
-        JFrame frame = new JFrame("Visualizar Petição");
+    public static JFrame render(String numeroProcesso, Peticao peticao) {
+        Usuario autorPeticao = peticao.getAutorPeticao();
+        boolean isAdvogado = autorPeticao instanceof Advogado;
+        String markdown = String.format(
+                """
+                        # Processo %s
+                        Data de criação: %s
+
+                        Data de última alteração: %s
+
+                        Autor da petição: %s
+
+                        ---
+
+                        %s
+                        """,
+                numeroProcesso,
+                peticao.getDataCriacao(),
+                peticao.getDataUltimaModificacao(),
+                isAdvogado ?
+                        String.format("%s - %s%s",
+                                autorPeticao.getNomeCompleto(),
+                                ((Advogado) autorPeticao).getEstadoOAB(),
+                                ((Advogado) autorPeticao).getNumeroOAB()
+                        ) :
+                        autorPeticao.getNomeCompleto(),
+                peticao.getTextoPeticao()
+        );
+
+        JFrame frame = new JFrame("Visualizar petição");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(400, 900);
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(10, 10, 10, 10);
 
-        // Box Layout vertical
-        Box verticalBox = Box.createVerticalBox();
-        // Data de criação
-        JLabel dataCriacaoLabel = new JLabel("Data de criação: " + peticao.getDataCriacao().toString());
-        verticalBox.add(dataCriacaoLabel);
-        // Data de última modificação
-        JLabel dataUltimaModificacaoLabel = new JLabel("Data de última modificação: " + peticao.getDataUltimaModificacao().toString());
-        verticalBox.add(dataUltimaModificacaoLabel);
-        // Texto da petição
-        JLabel textoPeticaoLabel = new JLabel("Texto da petição: " + peticao.getTextoPeticao());
-        verticalBox.add(textoPeticaoLabel);
+        JEditorPane minutaEditorPane = new JEditorPane();
+        minutaEditorPane.setContentType("text/html");
+        minutaEditorPane.setText(Processor.process(markdown));
+        minutaEditorPane.setEditable(false);
+        JScrollPane minutaScrollPane = new JScrollPane(minutaEditorPane);
 
-        // ComponentPane do Frame, box vertical
-        frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-        frame.getContentPane().add(verticalBox);
+        c.gridx = 0;
+        c.gridy = 0;
+        frame.add(minutaScrollPane, c);
+
+        frame.pack();
+        frame.setMinimumSize(frame.getSize());
 
         return frame;
     }

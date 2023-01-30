@@ -41,15 +41,21 @@ public class LoginGUI {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(5, 5, 5, 5);
 
-        c.gridx = 0; c.gridy = 0;
+        c.gridx = 0;
+        c.gridy = 0;
         frame.add(cpfLabel, c);
-        c.gridx = 1; c.gridy = 0;
+        c.gridx = 1;
+        c.gridy = 0;
         frame.add(cpfField, c);
-        c.gridx = 0; c.gridy = 1;
+        c.gridx = 0;
+        c.gridy = 1;
         frame.add(senhaLabel, c);
-        c.gridx = 1; c.gridy = 1;
+        c.gridx = 1;
+        c.gridy = 1;
         frame.add(senhaField, c);
-        c.gridx = 0; c.gridy = 2; c.gridwidth = 2;
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridwidth = 2;
         frame.add(loginButton, c);
         frame.pack();
         frame.setMinimumSize(frame.getSize());

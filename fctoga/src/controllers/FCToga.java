@@ -55,8 +55,7 @@ public class FCToga implements Serializable {
         if (instanciaUsuario.getSenha().equals(senha)) {
             this.usuarioLogado = instanciaUsuario;
             return instanciaUsuario;
-        }
-        else throw new IllegalArgumentException("Senha incorreta.");
+        } else throw new IllegalArgumentException("Senha incorreta.");
     }
 
     public Usuario getUsuarioLogado() {

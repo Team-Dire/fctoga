@@ -50,14 +50,17 @@ public class MenuPrincipal {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(5, 5, 5, 5);
-        c.gridx = 0; c.gridy = 0; frame.add(new JLabel("Bem-vindo, " + usuarioLogado.getNomeCompleto()), c);
+        c.gridx = 0;
+        c.gridy = 0;
+        frame.add(new JLabel("Bem-vindo, " + usuarioLogado.getNomeCompleto()), c);
 
         for (JButton botao : botoes) {
             c.gridy++;
             frame.add(botao, c);
         }
 
-        frame.pack(); frame.setMinimumSize(frame.getSize());
+        frame.pack();
+        frame.setMinimumSize(frame.getSize());
         return frame;
     }
 }

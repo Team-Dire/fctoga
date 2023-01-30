@@ -23,6 +23,7 @@ public class ControladorProcesso {
         FCToga.serializeInstance();
         return instanciaProcesso;
     }
+
     public static Processo novoProcessoCivil(String CPF_CNPJ_Requerente, String nomeRequerente, String CPF_CNPJ_Requerido, String nomeRequerido, Usuario representanteRequerido) {
         Date dataCriacao = new Date();
         Processo instanciaProcesso = new Processo();

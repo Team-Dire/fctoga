@@ -2,18 +2,16 @@ package view.processos;
 
 import controllers.ControladorProcesso;
 import controllers.FCToga;
+import models.Processo;
+import models.Usuario;
+import view.utils.CPFCNPJInputVerifier;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-
-import models.Processo;
-import models.Usuario;
-import view.utils.CPFCNPJInputVerifier;
+import java.util.List;
 
 public class CriarProcesso {
     public static JFrame render(DefaultTableModel fluxoDeTrabalhoModel) {
@@ -24,7 +22,8 @@ public class CriarProcesso {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
         c.insets = new Insets(5, 5, 5, 5);
-        c.gridx = 0; c.gridy = 0;
+        c.gridx = 0;
+        c.gridy = 0;
 
         String tipoUsuarioLogado = FCToga.getInstance().getUsuarioLogado().getTipoUsuario();
 
@@ -79,7 +78,10 @@ public class CriarProcesso {
         // Todos os usuários do tipo "Advogado" com exceção do usuário logado
         FCToga.getInstance().getUsuarios().stream().filter(usuario -> usuario.getTipoUsuario().equals("Advogado") && !usuario.equals(FCToga.getInstance().getUsuarioLogado())).forEach(fieldRepresentanteRequerido::addItem);
         // No combobox, aparece o nome do advogado adicionado
-        fieldRepresentanteRequerido.setRenderer((list, value, index, isSelected, cellHasFocus) -> new JLabel(value.getNomeCompleto()));
+        // Se não houver outros advogados além do usuário logado, o ComboBox será vazio
+        if (fieldRepresentanteRequerido.getItemCount() != 0)
+            fieldRepresentanteRequerido.setRenderer((list, value, index, isSelected, cellHasFocus) -> new JLabel(value.getNomeCompleto()));
+
         frame.add(labelRepresentanteRequerido, c);
         c.gridx++;
         frame.add(fieldRepresentanteRequerido, c);
@@ -130,8 +132,7 @@ public class CriarProcesso {
                     );
                     processoCriado.adicionarPeticao(fieldPeticaoInicial.getText());
                     FCToga.serializeInstance();
-                }
-                else if (tipoUsuarioLogado.equals("Promotor")) {
+                } else if (tipoUsuarioLogado.equals("Promotor")) {
                     Processo processoCriado = ControladorProcesso.novoProcessoCriminal(
                             fieldCPFCNPJRequerido.getText(),
                             fieldNomeRequerido.getText(),
@@ -139,8 +140,7 @@ public class CriarProcesso {
                     );
                     processoCriado.adicionarPeticao(fieldPeticaoInicial.getText());
                     FCToga.serializeInstance();
-                }
-                else {
+                } else {
                     throw new Exception("Usuário não é advogado nem promotor");
                 }
 
@@ -155,7 +155,8 @@ public class CriarProcesso {
                 frame.dispose();
             }
         });
-        c.gridheight = 1; c.gridwidth = 2;
+        c.gridheight = 1;
+        c.gridwidth = 2;
         frame.add(criarProcessoButton, c);
         // ===== BOTÃO DE CRIAR PROCESSO =====
 

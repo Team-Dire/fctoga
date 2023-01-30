@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 public class FluxoTrabalho {
     private static final String[] COLUNAS = {"Número do processo", "Última atualização", "Data da última atualização", "Status do processo"};
+
     public static JFrame render() {
         JFrame frame = new JFrame("Fluxo de Trabalho");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -53,7 +54,7 @@ public class FluxoTrabalho {
                     tipoAnexoMaisRecente = "Petição";
                 Date dataUltimaModificacao = atualizaListaProcessos().get(row).getDataUltimaModificacao();
 
-                return switch(column) {
+                return switch (column) {
                     case 0 -> atualizaListaProcessos().get(row).getNumeroProcesso();
                     // Tipo do anexo mais recente: Despacho, Petição ou Minuta de Sentença
                     case 1 -> tipoAnexoMaisRecente;
@@ -88,13 +89,20 @@ public class FluxoTrabalho {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(5, 5, 5, 5);
-        c.gridx = 0; c.gridy = 0; c.gridwidth = 2;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
         frame.add(fluxoTrabalhoScrollPane, c);
         c.gridwidth = 1;
-        c.gridx = 0; c.gridy = 1; frame.add(visualizarHistorico, c);
-        c.gridx = 1; c.gridy = 1; frame.add(criarProcesso, c);
+        c.gridx = 0;
+        c.gridy = 1;
+        frame.add(visualizarHistorico, c);
+        c.gridx = 1;
+        c.gridy = 1;
+        frame.add(criarProcesso, c);
 
-        frame.pack(); frame.setMinimumSize(frame.getSize());
+        frame.pack();
+        frame.setMinimumSize(frame.getSize());
         return frame;
     }
 
@@ -117,8 +125,8 @@ public class FluxoTrabalho {
                                         .stream()
                                         .filter(a -> a instanceof Minuta)
                                         .anyMatch(
-                                            m -> !((Minuta) m)
-                                                    .getAssinada())
+                                                m -> !((Minuta) m)
+                                                        .getAssinada())
                         );
             }
             case "Diretor" -> processosStream = processosFCToga.stream();

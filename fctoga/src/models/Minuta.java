@@ -8,57 +8,63 @@ public class Minuta extends Anexo {
     private Boolean assinada;
     private String nomeJuiz;
     private String comarcaJuiz;
+    private Usuario autorMinuta;
 
     // Construtores, getters e setters
     // region Boilerplate
 
-    public Minuta(Date dataCriacao, Date dataUltimaModificacao, String textoMinuta, String tipoMinuta, Boolean assinada, String nomeJuiz, String comarcaJuiz) {
-        super(dataCriacao, dataUltimaModificacao);
-        this.textoMinuta = textoMinuta;
-        this.tipoMinuta = tipoMinuta;
-        this.assinada = assinada;
-        this.nomeJuiz = nomeJuiz;
-        this.comarcaJuiz = comarcaJuiz;
+    public Minuta() {
+        super();
+        this.assinada = false;
     }
 
     public String getTextoMinuta() {
         return textoMinuta;
     }
 
-    public void setTextoMinuta(String textoMinuta) {
+    public Minuta setTextoMinuta(String textoMinuta) {
         this.textoMinuta = textoMinuta;
+        return this;
     }
 
     public String getTipoMinuta() {
         return tipoMinuta;
     }
 
-    public void setTipoMinuta(String tipoMinuta) {
+    public Minuta setTipoMinuta(String tipoMinuta) {
         this.tipoMinuta = tipoMinuta;
+        return this;
     }
 
     public Boolean getAssinada() {
         return assinada;
     }
 
-    public void setAssinada(Boolean assinada) {
-        this.assinada = assinada;
-    }
-
     public String getNomeJuiz() {
         return nomeJuiz;
     }
 
-    public void setNomeJuiz(String nomeJuiz) {
+    public Minuta setNomeJuiz(String nomeJuiz) {
         this.nomeJuiz = nomeJuiz;
+        return this;
     }
 
     public String getComarcaJuiz() {
         return comarcaJuiz;
     }
 
-    public void setComarcaJuiz(String comarcaJuiz) {
+    public Minuta setComarcaJuiz(String comarcaJuiz) {
         this.comarcaJuiz = comarcaJuiz;
+        return this;
+    }
+
+    public Usuario getAutorMinuta() {
+        return autorMinuta;
+    }
+
+    public Minuta setAutorMinuta(Usuario autorMinuta) {
+        this.autorMinuta = autorMinuta;
+        return this;
     }
     //endregion
 
@@ -69,10 +75,6 @@ public class Minuta extends Anexo {
         this.textoMinuta = textoMinuta;
         this.setDataUltimaModificacao(new Date());
         return true;
-    }
-
-    public static Minuta criarMinuta(String tipoMinuta, String textoMinuta) {
-        return new Minuta(new Date(), new Date(), textoMinuta, tipoMinuta, false, "", "");
     }
 
     public String assinarMinuta(String nomeJuiz, String comarcaJuiz) {

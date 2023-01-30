@@ -59,8 +59,7 @@ public class ListarAnexos {
         String representanteRequerente;
         if (processo.getTipoProceso().equals("Criminal")) {
             representanteRequerente = "Representante (Requerente): Justiça Pública (511740010001)";
-        }
-        else {
+        } else {
             representanteRequerente = String.format("Representante (Requerente): %s (%s)", processo.getRepresentanteRequerente().getNomeCompleto(), processo.getRepresentanteRequerente().getCPF());
         }
         panelInformacoesProcesso.add(new JLabel(representanteRequerente), c);
@@ -135,10 +134,10 @@ public class ListarAnexos {
 
             Anexo anexo = listaAnexos.get(row);
             if (anexo instanceof Minuta) {
-                JFrame frameVisualizarMinuta = VisualizarMinuta.render((Minuta) anexo);
+                JFrame frameVisualizarMinuta = VisualizarMinuta.render(processo.getNumeroProcesso(), (Minuta) anexo);
                 frameVisualizarMinuta.setVisible(true);
             } else {
-                JFrame frameVisualizarPeticao = VisualizarPeticao.render((Peticao) anexo);
+                JFrame frameVisualizarPeticao = VisualizarPeticao.render(processo.getNumeroProcesso(), (Peticao) anexo);
                 frameVisualizarPeticao.setVisible(true);
             }
         });
