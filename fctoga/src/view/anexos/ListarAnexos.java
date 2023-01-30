@@ -56,7 +56,14 @@ public class ListarAnexos {
         panelInformacoesProcesso.add(new JLabel(String.format("Requerido: %s (%s)", processo.getNomeRequerido(), processo.getCPF_CNPJ_Requerido())), c);
         // Representante do requerente
         c.gridy = 5;
-        panelInformacoesProcesso.add(new JLabel(String.format("Representante (Requerente): %s (%s)", processo.getRepresentanteRequerente().getNomeCompleto(), processo.getRepresentanteRequerente().getCPF())), c);
+        String representanteRequerente;
+        if (processo.getTipoProceso().equals("Criminal")) {
+            representanteRequerente = "Representante (Requerente): Justiça Pública (511740010001)";
+        }
+        else {
+            representanteRequerente = String.format("Representante (Requerente): %s (%s)", processo.getRepresentanteRequerente().getNomeCompleto(), processo.getRepresentanteRequerente().getCPF());
+        }
+        panelInformacoesProcesso.add(new JLabel(representanteRequerente), c);
         // Representante do requerido
         c.gridy = 6;
         panelInformacoesProcesso.add(new JLabel(String.format("Representante (Requerido): %s (%s)", processo.getRepresentanteRequerido().getNomeCompleto(), processo.getRepresentanteRequerido().getCPF())), c);
