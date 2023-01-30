@@ -17,13 +17,14 @@ public class Processo implements Serializable {
     private String numeroProcesso;
     private Date dataCriacao;
     private final ArrayList<Anexo> anexos;
-    private final Usuario representante;
+    private Usuario representanteRequerido;
+    private final Usuario representanteRequerente;
 
     // Construtores, getters e setters
     // region Boilerplate
     public Processo() {
         this.anexos = new ArrayList<>();
-        this.representante = FCToga.getInstance().getUsuarioLogado();
+        this.representanteRequerente = FCToga.getInstance().getUsuarioLogado();
     }
 
     public String getNomeRequerente() {
@@ -102,8 +103,17 @@ public class Processo implements Serializable {
         return anexos;
     }
 
-    public Usuario getRepresentante() {
-        return representante;
+    public Processo setRepresentanteRequerido(Usuario representanteRequerido) {
+        this.representanteRequerido = representanteRequerido;
+        return this;
+    }
+
+    public Usuario getRepresentanteRequerido() {
+        return representanteRequerido;
+    }
+
+    public Usuario getRepresentanteRequerente() {
+        return representanteRequerente;
     }
     //endregion
 

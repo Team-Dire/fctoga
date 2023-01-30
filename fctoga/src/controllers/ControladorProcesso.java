@@ -1,11 +1,12 @@
 package controllers;
 
 import models.Processo;
+import models.Usuario;
 
 import java.util.Date;
 
 public class ControladorProcesso {
-    public static Processo novoProcessoCriminal(String CPF_CNPJ_Requerido, String nomeRequerido) {
+    public static Processo novoProcessoCriminal(String CPF_CNPJ_Requerido, String nomeRequerido, Usuario representanteRequerido) {
         Date dataCriacao = new Date();
         Processo instanciaProcesso = new Processo();
         instanciaProcesso
@@ -16,12 +17,13 @@ public class ControladorProcesso {
                 .setTipoProceso("Criminal")
                 .setFechado(false)
                 .setDataCriacao(dataCriacao)
-                .setNumeroProcesso(Processo.numeroProcessoFromData(dataCriacao));
+                .setNumeroProcesso(Processo.numeroProcessoFromData(dataCriacao))
+                .setRepresentanteRequerido(representanteRequerido);
         FCToga.getInstance().processos.add(instanciaProcesso);
         FCToga.serializeInstance();
         return instanciaProcesso;
     }
-    public static Processo novoProcessoCivil(String CPF_CNPJ_Requerente, String nomeRequerente, String CPF_CNPJ_Requerido, String nomeRequerido) {
+    public static Processo novoProcessoCivil(String CPF_CNPJ_Requerente, String nomeRequerente, String CPF_CNPJ_Requerido, String nomeRequerido, Usuario representanteRequerido) {
         Date dataCriacao = new Date();
         Processo instanciaProcesso = new Processo();
         instanciaProcesso
@@ -32,7 +34,8 @@ public class ControladorProcesso {
                 .setTipoProceso("Civil")
                 .setFechado(false)
                 .setDataCriacao(dataCriacao)
-                .setNumeroProcesso(Processo.numeroProcessoFromData(dataCriacao));
+                .setNumeroProcesso(Processo.numeroProcessoFromData(dataCriacao))
+                .setRepresentanteRequerido(representanteRequerido);
         FCToga.getInstance().processos.add(instanciaProcesso);
         FCToga.serializeInstance();
         return instanciaProcesso;

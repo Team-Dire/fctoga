@@ -103,7 +103,7 @@ public class FluxoTrabalho {
         switch (tipoUsuarioLogado) {
             case "Advogado", "Promotor" -> processosStream = processosFCToga
                     .stream()
-                    .filter(p -> p.getRepresentante() == usuarioLogado);
+                    .filter(p -> p.getRepresentanteRequerente() == usuarioLogado || p.getRepresentanteRequerido() == usuarioLogado);
             // Processos com minutas a assinar
             case "Juiz" -> {
                 processosStream = processosFCToga

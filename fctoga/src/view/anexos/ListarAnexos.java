@@ -54,9 +54,12 @@ public class ListarAnexos {
         panelInformacoesProcesso.add(new JLabel(String.format("Requerente: %s (%s)", processo.getNomeRequerente(), processo.getCPF_CNPJ_Requerente())), c);
         c.gridy = 4;
         panelInformacoesProcesso.add(new JLabel(String.format("Requerido: %s (%s)", processo.getNomeRequerido(), processo.getCPF_CNPJ_Requerido())), c);
-        // Representante
+        // Representante do requerente
         c.gridy = 5;
-        panelInformacoesProcesso.add(new JLabel(String.format("Representante: %s (%s)", processo.getRepresentante().getNomeCompleto(), processo.getRepresentante().getCPF())), c);
+        panelInformacoesProcesso.add(new JLabel(String.format("Representante (Requerente): %s (%s)", processo.getRepresentanteRequerente().getNomeCompleto(), processo.getRepresentanteRequerente().getCPF())), c);
+        // Representante do requerido
+        c.gridy = 6;
+        panelInformacoesProcesso.add(new JLabel(String.format("Representante (Requerido): %s (%s)", processo.getRepresentanteRequerido().getNomeCompleto(), processo.getRepresentanteRequerido().getCPF())), c);
         //endregion
 
         // region Tabela
