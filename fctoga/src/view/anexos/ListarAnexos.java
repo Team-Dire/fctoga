@@ -22,7 +22,7 @@ public class ListarAnexos {
             "Promotor", new boolean[]{false, true, true, false, false}
     );
 
-    public static JFrame render(Processo processo) {
+    public static JFrame render(Processo processo, DefaultTableModel fluxoTrabalhoModel) {
         ArrayList<Anexo> listaAnexos = processo.getAnexos();
 
         JFrame frame = new JFrame("Listar Anexos");
@@ -98,6 +98,7 @@ public class ListarAnexos {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                     model.fireTableDataChanged();
+                    fluxoTrabalhoModel.fireTableDataChanged();
                 }
             });
         });
@@ -110,6 +111,7 @@ public class ListarAnexos {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                     model.fireTableDataChanged();
+                    fluxoTrabalhoModel.fireTableDataChanged();
                 }
             });
         });
@@ -147,6 +149,7 @@ public class ListarAnexos {
                     @Override
                     public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                         model.fireTableDataChanged();
+                        fluxoTrabalhoModel.fireTableDataChanged();
                     }
                 });
             } else {
@@ -169,6 +172,8 @@ public class ListarAnexos {
                     Juiz juizLogado = (Juiz) (FCToga.getInstance().getUsuarioLogado());
                     ((Minuta) anexo).assinarMinuta(juizLogado.getNomeCompleto(), juizLogado.getComarca());
                     JOptionPane.showMessageDialog(frame, "Minuta assinada com sucesso");
+                    model.fireTableDataChanged();
+                    fluxoTrabalhoModel.fireTableDataChanged();
                 }
             } else {
                 JOptionPane.showMessageDialog(frame, "Selecione uma minuta para editar");

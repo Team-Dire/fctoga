@@ -4,6 +4,7 @@ import controllers.ControladorProcesso;
 import controllers.FCToga;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.util.List;
@@ -14,7 +15,7 @@ import models.Processo;
 import view.utils.CPFCNPJInputVerifier;
 
 public class CriarProcesso {
-    public static JFrame render() {
+    public static JFrame render(DefaultTableModel fluxoDeTrabalhoModel) {
         JFrame frame = new JFrame("Criar Processo");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(300, 400);
@@ -115,6 +116,7 @@ public class CriarProcesso {
                 sucesso = false;
             }
             if (sucesso) {
+                fluxoDeTrabalhoModel.fireTableDataChanged();
                 JOptionPane.showMessageDialog(frame, "Processo criado com sucesso!");
                 frame.dispose();
             }
