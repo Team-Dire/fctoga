@@ -1,80 +1,58 @@
 package view.anexos;
 
+import com.github.rjeschke.txtmark.Processor;
 import models.Minuta;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.awt.*;
 
 public class VisualizarMinuta {
-    private final static String[] LABELS = {"Data de criação", "Data de última modificação", "Tipo da minuta", "Texto da minuta"};
+    public static JFrame render(String numeroProcesso, Minuta minuta) {
+        String markdown = String.format(
+                """
+                        # Processo %s
+                        Data de criação: %s
 
-    public static JFrame render(Minuta minuta) {
-        JFrame frame = new JFrame("Visualizar Minuta");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(400, 900);
+                        Data de última alteração: %s
 
-        JLabel[] labels = new JLabel[LABELS.length + 2];
-        JTextField[] conteudos = new JTextField[LABELS.length + 2];
-        List<Box> horizontalBoxes = new ArrayList<Box>();
+                        Autor: %s
 
-        for (int i = 0; i < LABELS.length; i++) {
-            Box horizontalBox = Box.createHorizontalBox();
-            labels[i] = new JLabel(LABELS[i]);
-            conteudos[i] = new JTextField();
-            conteudos[i].setEditable(false);
-            conteudos[i].setBorder(null);
-            conteudos[i].setOpaque(false);
-            conteudos[i].setFocusable(false);
-            conteudos[i].setColumns(30);
-            horizontalBox.add(labels[i]);
-            horizontalBox.add(conteudos[i]);
-            horizontalBoxes.add(horizontalBox);
-        }
+                        Minuta de %s
 
-        conteudos[0].setText(minuta.getDataCriacao().toString());
-        conteudos[1].setText(minuta.getDataUltimaModificacao().toString());
-        conteudos[2].setText(minuta.getTipoMinuta());
-        conteudos[3].setText(minuta.getTextoMinuta());
+                        ---
+
+                        %s
+                        """, numeroProcesso, minuta.getDataCriacao(), minuta.getDataUltimaModificacao(), minuta.getAutorMinuta().getNomeCompleto(), minuta.getTipoMinuta(), minuta.getTextoMinuta());
 
         if (minuta.getAssinada()) {
-            labels[LABELS.length + 1] = new JLabel("Assinada");
-            conteudos[LABELS.length + 1] = new JTextField();
-            conteudos[LABELS.length + 1].setEditable(false);
-            conteudos[LABELS.length + 1].setBorder(null);
-            conteudos[LABELS.length + 1].setOpaque(false);
-            conteudos[LABELS.length + 1].setFocusable(false);
-            conteudos[LABELS.length + 1].setColumns(30);
-            conteudos[LABELS.length + 1].setText("Sim");
-            Box horizontalBox = Box.createHorizontalBox();
-            horizontalBox.add(labels[LABELS.length + 1]);
-            horizontalBox.add(conteudos[LABELS.length + 1]);
-            horizontalBoxes.add(horizontalBox);
+            markdown +=
+                    String.format("""
 
-            labels[LABELS.length + 2] = new JLabel("Assinatura");
-            conteudos[LABELS.length + 2] = new JTextField();
-            conteudos[LABELS.length + 2].setEditable(false);
-            conteudos[LABELS.length + 2].setBorder(null);
-            conteudos[LABELS.length + 2].setOpaque(false);
-            conteudos[LABELS.length + 2].setFocusable(false);
-            conteudos[LABELS.length + 2].setColumns(30);
-            conteudos[LABELS.length + 2].setText(minuta.getNomeJuiz() + " - " + minuta.getComarcaJuiz());
-            horizontalBox = Box.createHorizontalBox();
-            horizontalBox.add(labels[LABELS.length + 2]);
-            horizontalBox.add(conteudos[LABELS.length + 2]);
-            horizontalBoxes.add(horizontalBox);
+                            ---
+
+                            Assinada digitalmente por %s, comarca de %s.
+                            """, minuta.getNomeJuiz(), minuta.getComarcaJuiz());
         }
+        JFrame frame = new JFrame("Visualizar minuta");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.BOTH;
+        c.insets = new Insets(10, 10, 10, 10);
 
-        // Box Layout vertical
-        Box verticalBox = Box.createVerticalBox();
-        // Adiciona os horizontal boxes
-        for (Box horizontalBox : horizontalBoxes) {
-            // Espaçamento vertical
-            verticalBox.add(Box.createVerticalStrut(10));
-            verticalBox.add(horizontalBox);
-        }
+        JEditorPane minutaEditorPane = new JEditorPane();
+        minutaEditorPane.setContentType("text/html");
+        minutaEditorPane.setText(Processor.process(markdown));
+        minutaEditorPane.setEditable(false);
+        JScrollPane minutaScrollPane = new JScrollPane(minutaEditorPane);
 
-        frame.getContentPane().add(verticalBox);
+        c.gridx = 0;
+        c.gridy = 0;
+        frame.add(minutaScrollPane, c);
+
+        frame.pack();
+        frame.setMinimumSize(frame.getSize());
+
         return frame;
     }
 }

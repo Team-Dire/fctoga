@@ -9,30 +9,27 @@ public class Anexo implements Serializable {
 
     // Construtores, getters e setters
     // region Boilerplate
-    public Anexo(Date dataCriacao, Date dataUltimaModificacao) {
-        this.dataCriacao = dataCriacao;
-        this.dataUltimaModificacao = dataUltimaModificacao;
+    public Anexo() {
+        this.dataCriacao = new Date();
+        this.dataUltimaModificacao = new Date();
     }
 
     public Date getDataCriacao() {
         return dataCriacao;
     }
 
-    public void setDataCriacao(Date dataCriacao) {
+    public Anexo setDataCriacao(Date dataCriacao) {
         this.dataCriacao = dataCriacao;
+        return this;
     }
 
     public Date getDataUltimaModificacao() {
         return dataUltimaModificacao;
     }
 
-    public void setDataUltimaModificacao(Date dataUltimaModificacao) {
+    public Anexo setDataUltimaModificacao(Date dataUltimaModificacao) {
         this.dataUltimaModificacao = dataUltimaModificacao;
+        return this;
     }
-
     //endregion
-
-    public Anexo visualizarAnexo() {
-        return null;
-    }
 }

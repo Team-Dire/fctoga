@@ -4,6 +4,7 @@ import controllers.FCToga;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 
 public class Processo implements Serializable {
@@ -16,13 +17,14 @@ public class Processo implements Serializable {
     private String numeroProcesso;
     private Date dataCriacao;
     private final ArrayList<Anexo> anexos;
-    private final Usuario representante;
+    private Usuario representanteRequerido;
+    private final Usuario representanteRequerente;
 
     // Construtores, getters e setters
     // region Boilerplate
     public Processo() {
         this.anexos = new ArrayList<>();
-        this.representante = FCToga.getInstance().getUsuarioLogado();
+        this.representanteRequerente = FCToga.getInstance().getUsuarioLogado();
     }
 
     public String getNomeRequerente() {
@@ -101,19 +103,58 @@ public class Processo implements Serializable {
         return anexos;
     }
 
-    public Usuario getRepresentante() {
-        return representante;
+    public Processo setRepresentanteRequerido(Usuario representanteRequerido) {
+        this.representanteRequerido = representanteRequerido;
+        return this;
+    }
+
+    public Usuario getRepresentanteRequerido() {
+        return representanteRequerido;
+    }
+
+    public Usuario getRepresentanteRequerente() {
+        return representanteRequerente;
     }
     //endregion
 
     public void adicionarPeticao(String textoPeticao) {
-        Anexo peticao = Peticao.criarPeticao(textoPeticao);
-        anexos.add(peticao);
+        if (!fechado) {
+            Anexo peticao = new Peticao()
+                    .setAutorPeticao(FCToga.getInstance().getUsuarioLogado())
+                    .setTextoPeticao(textoPeticao);
+            anexos.add(peticao);
+        }
+        else {
+            throw new RuntimeException("Não é possível adicionar petição a um processo fechado.");
+        }
     }
 
     public void adicionarMinuta(String tipoMinuta, String textoMinuta) {
-        Minuta minuta = Minuta.criarMinuta(tipoMinuta, textoMinuta);
-        anexos.add(minuta);
+        if (!fechado) {
+            Minuta minuta = new Minuta()
+                    .setTipoMinuta(tipoMinuta)
+                    .setTextoMinuta(textoMinuta)
+                    .setAutorMinuta(FCToga.getInstance().getUsuarioLogado());
+            anexos.add(minuta);
+        }
+        else {
+            throw new RuntimeException("Não é possível adicionar minuta a um processo fechado.");
+        }
+    }
+
+    public Anexo getAnexoModificacaoMaisRecente() {
+        return anexos.stream()
+                .max(Comparator.comparing(Anexo::getDataUltimaModificacao))
+                .orElse(null);
+    }
+
+    public Date getDataUltimaModificacao() {
+        Date dataUltimaModificacao = dataCriacao;
+        Anexo anexoMaisRecente = getAnexoModificacaoMaisRecente();
+        if (anexoMaisRecente != null) {
+            dataUltimaModificacao = anexoMaisRecente.getDataUltimaModificacao();
+        }
+        return dataUltimaModificacao;
     }
 
     public static String numeroProcessoFromData(Date data) {

@@ -22,7 +22,7 @@ public class ListarAnexos {
             "Promotor", new boolean[]{false, true, true, false, false}
     );
 
-    public static JFrame render(Processo processo) {
+    public static JFrame render(Processo processo, DefaultTableModel fluxoTrabalhoModel) {
         ArrayList<Anexo> listaAnexos = processo.getAnexos();
 
         JFrame frame = new JFrame("Listar Anexos");
@@ -54,15 +54,29 @@ public class ListarAnexos {
         panelInformacoesProcesso.add(new JLabel(String.format("Requerente: %s (%s)", processo.getNomeRequerente(), processo.getCPF_CNPJ_Requerente())), c);
         c.gridy = 4;
         panelInformacoesProcesso.add(new JLabel(String.format("Requerido: %s (%s)", processo.getNomeRequerido(), processo.getCPF_CNPJ_Requerido())), c);
-        // Representante
+        // Representante do requerente
         c.gridy = 5;
-        panelInformacoesProcesso.add(new JLabel(String.format("Representante: %s (%s)", processo.getRepresentante().getNomeCompleto(), processo.getRepresentante().getCPF())), c);
+        String representanteRequerente;
+        if (processo.getTipoProceso().equals("Criminal")) {
+            representanteRequerente = "Representante (Requerente): Justiça Pública (511740010001)";
+        } else {
+            representanteRequerente = String.format("Representante (Requerente): %s (%s)", processo.getRepresentanteRequerente().getNomeCompleto(), processo.getRepresentanteRequerente().getCPF());
+        }
+        panelInformacoesProcesso.add(new JLabel(representanteRequerente), c);
+        // Representante do requerido
+        c.gridy = 6;
+        panelInformacoesProcesso.add(new JLabel(String.format("Representante (Requerido): %s (%s)", processo.getRepresentanteRequerido().getNomeCompleto(), processo.getRepresentanteRequerido().getCPF())), c);
         //endregion
 
         // region Tabela
         JTable table = new JTable();
 
         AbstractTableModel model = new DefaultTableModel(COLUNAS, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
             @Override
             public int getRowCount() {
                 return listaAnexos.size();
@@ -91,6 +105,11 @@ public class ListarAnexos {
             botoes[i] = new JButton(BOTOES_LABEL[i]);
 
         botoes[0].addActionListener(e -> {
+            if (processo.getFechado()) {
+                JOptionPane.showMessageDialog(null, "Não é possível criar minutas em um processo fechado.");
+                return;
+            }
+
             JFrame frameCriarMinuta = CriarMinuta.render(processo);
             frameCriarMinuta.setVisible(true);
             // Ao fechar frame, atualiza tabela
@@ -98,11 +117,17 @@ public class ListarAnexos {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                     model.fireTableDataChanged();
+                    fluxoTrabalhoModel.fireTableDataChanged();
                 }
             });
         });
 
         botoes[1].addActionListener(e -> {
+            if (processo.getFechado()) {
+                JOptionPane.showMessageDialog(null, "Não é possível peticionar em um processo fechado.");
+                return;
+            }
+
             JFrame frameCriarPeticao = CriarPeticao.render(processo);
             frameCriarPeticao.setVisible(true);
             // Ao fechar frame, atualiza tabela
@@ -110,6 +135,7 @@ public class ListarAnexos {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                     model.fireTableDataChanged();
+                    fluxoTrabalhoModel.fireTableDataChanged();
                 }
             });
         });
@@ -123,10 +149,10 @@ public class ListarAnexos {
 
             Anexo anexo = listaAnexos.get(row);
             if (anexo instanceof Minuta) {
-                JFrame frameVisualizarMinuta = VisualizarMinuta.render((Minuta) anexo);
+                JFrame frameVisualizarMinuta = VisualizarMinuta.render(processo.getNumeroProcesso(), (Minuta) anexo);
                 frameVisualizarMinuta.setVisible(true);
             } else {
-                JFrame frameVisualizarPeticao = VisualizarPeticao.render((Peticao) anexo);
+                JFrame frameVisualizarPeticao = VisualizarPeticao.render(processo.getNumeroProcesso(), (Peticao) anexo);
                 frameVisualizarPeticao.setVisible(true);
             }
         });
@@ -138,8 +164,23 @@ public class ListarAnexos {
                 return;
             }
 
+            if (listaAnexos.get(row) instanceof Peticao) {
+                JOptionPane.showMessageDialog(frame, "Não é possível editar uma petição");
+                return;
+            }
+
+            if (processo.getFechado()) {
+                JOptionPane.showMessageDialog(null, "Não é possível editar uma minuta em um processo fechado.");
+                return;
+            }
+
             Anexo anexo = listaAnexos.get(row);
             if (anexo instanceof Minuta) {
+                if (((Minuta) anexo).getAssinada()) {
+                    JOptionPane.showMessageDialog(frame, "Não é possível editar uma minuta assinada");
+                    return;
+                }
+
                 JFrame frameEditarMinuta = EditarMinuta.render((Minuta) anexo);
                 frameEditarMinuta.setVisible(true);
                 // Ao fechar frame, atualiza tabela
@@ -147,10 +188,9 @@ public class ListarAnexos {
                     @Override
                     public void windowClosed(java.awt.event.WindowEvent windowEvent) {
                         model.fireTableDataChanged();
+                        fluxoTrabalhoModel.fireTableDataChanged();
                     }
                 });
-            } else {
-                JOptionPane.showMessageDialog(frame, "Selecione uma minuta para editar");
             }
         });
 
@@ -161,6 +201,11 @@ public class ListarAnexos {
                 return;
             }
 
+            if (listaAnexos.get(row) instanceof Peticao) {
+                JOptionPane.showMessageDialog(frame, "Não é possível assinar uma petição");
+                return;
+            }
+
             Anexo anexo = listaAnexos.get(row);
             if (anexo instanceof Minuta) {
                 // Dialog para confirmar se a minuta será assinada ou não
@@ -168,10 +213,15 @@ public class ListarAnexos {
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     Juiz juizLogado = (Juiz) (FCToga.getInstance().getUsuarioLogado());
                     ((Minuta) anexo).assinarMinuta(juizLogado.getNomeCompleto(), juizLogado.getComarca());
+                    // Se a minuta assinada for do tipo "Sentença", o processo é finalizado
+                    if (((Minuta) anexo).getTipoMinuta().equals("Sentença")) {
+                        processo.setFechado(true);
+                    }
+                    FCToga.serializeInstance();
                     JOptionPane.showMessageDialog(frame, "Minuta assinada com sucesso");
+                    model.fireTableDataChanged();
+                    fluxoTrabalhoModel.fireTableDataChanged();
                 }
-            } else {
-                JOptionPane.showMessageDialog(frame, "Selecione uma minuta para editar");
             }
         });
         //endregion
