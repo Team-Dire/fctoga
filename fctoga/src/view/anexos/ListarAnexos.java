@@ -73,6 +73,11 @@ public class ListarAnexos {
 
         AbstractTableModel model = new DefaultTableModel(COLUNAS, 0) {
             @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+
+            @Override
             public int getRowCount() {
                 return listaAnexos.size();
             }
@@ -100,6 +105,11 @@ public class ListarAnexos {
             botoes[i] = new JButton(BOTOES_LABEL[i]);
 
         botoes[0].addActionListener(e -> {
+            if (processo.getFechado()) {
+                JOptionPane.showMessageDialog(null, "Não é possível criar minutas em um processo fechado.");
+                return;
+            }
+
             JFrame frameCriarMinuta = CriarMinuta.render(processo);
             frameCriarMinuta.setVisible(true);
             // Ao fechar frame, atualiza tabela
@@ -113,6 +123,11 @@ public class ListarAnexos {
         });
 
         botoes[1].addActionListener(e -> {
+            if (processo.getFechado()) {
+                JOptionPane.showMessageDialog(null, "Não é possível peticionar em um processo fechado.");
+                return;
+            }
+
             JFrame frameCriarPeticao = CriarPeticao.render(processo);
             frameCriarPeticao.setVisible(true);
             // Ao fechar frame, atualiza tabela
@@ -149,8 +164,23 @@ public class ListarAnexos {
                 return;
             }
 
+            if (listaAnexos.get(row) instanceof Peticao) {
+                JOptionPane.showMessageDialog(frame, "Não é possível editar uma petição");
+                return;
+            }
+
+            if (processo.getFechado()) {
+                JOptionPane.showMessageDialog(null, "Não é possível editar uma minuta em um processo fechado.");
+                return;
+            }
+
             Anexo anexo = listaAnexos.get(row);
             if (anexo instanceof Minuta) {
+                if (((Minuta) anexo).getAssinada()) {
+                    JOptionPane.showMessageDialog(frame, "Não é possível editar uma minuta assinada");
+                    return;
+                }
+
                 JFrame frameEditarMinuta = EditarMinuta.render((Minuta) anexo);
                 frameEditarMinuta.setVisible(true);
                 // Ao fechar frame, atualiza tabela
@@ -161,8 +191,6 @@ public class ListarAnexos {
                         fluxoTrabalhoModel.fireTableDataChanged();
                     }
                 });
-            } else {
-                JOptionPane.showMessageDialog(frame, "Selecione uma minuta para editar");
             }
         });
 
@@ -173,6 +201,11 @@ public class ListarAnexos {
                 return;
             }
 
+            if (listaAnexos.get(row) instanceof Peticao) {
+                JOptionPane.showMessageDialog(frame, "Não é possível assinar uma petição");
+                return;
+            }
+
             Anexo anexo = listaAnexos.get(row);
             if (anexo instanceof Minuta) {
                 // Dialog para confirmar se a minuta será assinada ou não
@@ -180,13 +213,15 @@ public class ListarAnexos {
                 if (dialogResult == JOptionPane.YES_OPTION) {
                     Juiz juizLogado = (Juiz) (FCToga.getInstance().getUsuarioLogado());
                     ((Minuta) anexo).assinarMinuta(juizLogado.getNomeCompleto(), juizLogado.getComarca());
+                    // Se a minuta assinada for do tipo "Sentença", o processo é finalizado
+                    if (((Minuta) anexo).getTipoMinuta().equals("Sentença")) {
+                        processo.setFechado(true);
+                    }
                     FCToga.serializeInstance();
                     JOptionPane.showMessageDialog(frame, "Minuta assinada com sucesso");
                     model.fireTableDataChanged();
                     fluxoTrabalhoModel.fireTableDataChanged();
                 }
-            } else {
-                JOptionPane.showMessageDialog(frame, "Selecione uma minuta para editar");
             }
         });
         //endregion

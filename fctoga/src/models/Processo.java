@@ -118,18 +118,28 @@ public class Processo implements Serializable {
     //endregion
 
     public void adicionarPeticao(String textoPeticao) {
-        Anexo peticao = new Peticao()
-                .setAutorPeticao(FCToga.getInstance().getUsuarioLogado())
-                .setTextoPeticao(textoPeticao);
-        anexos.add(peticao);
+        if (!fechado) {
+            Anexo peticao = new Peticao()
+                    .setAutorPeticao(FCToga.getInstance().getUsuarioLogado())
+                    .setTextoPeticao(textoPeticao);
+            anexos.add(peticao);
+        }
+        else {
+            throw new RuntimeException("Não é possível adicionar petição a um processo fechado.");
+        }
     }
 
     public void adicionarMinuta(String tipoMinuta, String textoMinuta) {
-        Minuta minuta = new Minuta()
-                .setTipoMinuta(tipoMinuta)
-                .setTextoMinuta(textoMinuta)
-                .setAutorMinuta(FCToga.getInstance().getUsuarioLogado());
-        anexos.add(minuta);
+        if (!fechado) {
+            Minuta minuta = new Minuta()
+                    .setTipoMinuta(tipoMinuta)
+                    .setTextoMinuta(textoMinuta)
+                    .setAutorMinuta(FCToga.getInstance().getUsuarioLogado());
+            anexos.add(minuta);
+        }
+        else {
+            throw new RuntimeException("Não é possível adicionar minuta a um processo fechado.");
+        }
     }
 
     public Anexo getAnexoModificacaoMaisRecente() {

@@ -70,7 +70,7 @@ public class Minuta extends Anexo {
 
     public Boolean alterarMinuta(String textoMinuta) {
         if (this.assinada) {
-            return false;
+            throw new RuntimeException("Minuta já assinada");
         }
         this.textoMinuta = textoMinuta;
         this.setDataUltimaModificacao(new Date());

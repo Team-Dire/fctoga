@@ -23,7 +23,7 @@ public class FCToga implements Serializable {
         return usuarios;
     }
 
-    public String criarUsuario(String CPF, String senha, String nomeCompleto, String tipo, String numeroOAB, String estadoOAB, String comarca) {
+    public String criarUsuario(String CPF, String senha, String nomeCompleto, String tipo, String comarca, String estadoOAB, String numeroOAB) {
         // Primeiro, verifica se usuario já existe.
         if (usuarios.stream().anyMatch(usuario -> usuario.getCPF().equals(CPF))) {
             return "Usuário já existe.";

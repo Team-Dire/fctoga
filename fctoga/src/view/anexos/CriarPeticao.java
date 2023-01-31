@@ -4,55 +4,53 @@ import controllers.FCToga;
 import models.Processo;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class CriarPeticao {
-    private static final String[] LABELS = {"Texto da petição"};
-
     public static JFrame render(Processo processo) {
         JFrame frame = new JFrame("Adicionar Petição");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(400, 900);
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(10, 10, 10, 10);
 
         // Campo para inserir texto da petição
-        JLabel[] labels = new JLabel[LABELS.length];
-        JTextField[] textFields = new JTextField[LABELS.length];
-        for (int i = 0; i < LABELS.length; i++) {
-            labels[i] = new JLabel(LABELS[i]);
-            textFields[i] = new JTextField();
-        }
+        JLabel textoPeticaoLabel = new JLabel("Texto da petição");
+        JTextArea textoPeticaoField = new JTextArea(20, 20);
+        textoPeticaoField.setMinimumSize(textoPeticaoField.getPreferredSize());
+        JScrollPane textoPeticaoFieldScrollPane = new JScrollPane(textoPeticaoField);
+        c.gridx = 0; c.gridy = 0;
+        frame.add(textoPeticaoLabel, c);
+        c.gridx = 1;
+        frame.add(textoPeticaoFieldScrollPane, c);
 
         // Botão de adicionar
         JButton adicionar = new JButton("Adicionar");
         adicionar.addActionListener(e -> {
-            for (int i = 0; i < LABELS.length; i++) {
-                if (textFields[i].getText().isEmpty()) {
-                    JOptionPane.showMessageDialog(frame, "Preencha todos os campos", "Erro", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+            if (textoPeticaoField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(frame, "Digite o texto da petição");
+                return;
             }
 
-            // Adiciona petição
-            processo.adicionarPeticao(textFields[0].getText());
-            FCToga.serializeInstance();
+            try {
+                // Adiciona petição
+                processo.adicionarPeticao(textoPeticaoField.getText());
+                FCToga.serializeInstance();
+            }
+            catch (Exception exception) {
+                JOptionPane.showMessageDialog(frame, exception.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             JOptionPane.showMessageDialog(frame, "Petição adicionada com sucesso");
             frame.dispose();
         });
+        c.gridx = 0; c.gridy = 1; c.gridwidth = 2;
+        frame.add(adicionar, c);
 
-        // Adiciona componentes ao frame
-        // Box layout horizontal para cada campo
-        Box verticalBox = Box.createVerticalBox();
-        for (int i = 0; i < LABELS.length; i++) {
-            Box horizontalBox = Box.createHorizontalBox();
-            horizontalBox.add(labels[i]);
-            horizontalBox.add(textFields[i]);
-            verticalBox.add(horizontalBox);
-        }
-        // Box horizontal para o botão
-        Box horizontalBox = Box.createHorizontalBox();
-        horizontalBox.add(adicionar);
-        verticalBox.add(horizontalBox);
+        frame.pack();
+        frame.setMinimumSize(frame.getSize());
 
-        frame.getContentPane().add(verticalBox);
         return frame;
     }
 }

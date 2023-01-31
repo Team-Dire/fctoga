@@ -4,6 +4,7 @@ import controllers.FCToga;
 import models.Processo;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.Arrays;
 
 public class CriarMinuta {
@@ -12,23 +13,30 @@ public class CriarMinuta {
     public static JFrame render(Processo processo) {
         JFrame frame = new JFrame("Criar Minuta");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(400, 900);
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(10, 10, 10, 10);
 
         // ===== CAMPOS =====
         // Tipo da minuta
         JLabel tipoLabel = new JLabel("Tipo da minuta");
         JComboBox<String> tipoField = new JComboBox<>();
         Arrays.stream(TIPOS_MINUTA).forEach(tipoField::addItem);
-        Box tipoBox = Box.createHorizontalBox();
-        tipoBox.add(tipoLabel);
-        tipoBox.add(tipoField);
+        c.gridx = 0; c.gridy = 0;
+        frame.add(tipoLabel, c);
+        c.gridx = 1;
+        frame.add(tipoField, c);
 
         // Texto da minuta
         JLabel textoLabel = new JLabel("Texto da minuta");
-        JTextArea textoField = new JTextArea();
-        Box textoBox = Box.createHorizontalBox();
-        textoBox.add(textoLabel);
-        textoBox.add(textoField);
+        JTextArea textoField = new JTextArea(20, 20);
+        textoField.setMinimumSize(textoField.getPreferredSize());
+        JScrollPane textoPeticaoFieldScrollPane = new JScrollPane(textoField);
+        c.gridx = 0; c.gridy = 1;
+        frame.add(textoLabel, c);
+        c.gridx = 1;
+        frame.add(textoPeticaoFieldScrollPane, c);
 
         // Botão de adicionar
         JButton adicionar = new JButton("Criar minuta");
@@ -44,27 +52,23 @@ public class CriarMinuta {
             }
 
             // Adiciona minuta
-            processo.adicionarMinuta(tipoField.getSelectedItem().toString(), textoField.getText());
-            FCToga.serializeInstance();
+            try {
+                processo.adicionarMinuta(tipoField.getSelectedItem().toString(), textoField.getText());
+                FCToga.serializeInstance();
+            }
+            catch (Exception ex) {
+                JOptionPane.showMessageDialog(frame, ex.getMessage());
+                return;
+            }
             JOptionPane.showMessageDialog(frame, "Minuta adicionada com sucesso");
             frame.dispose();
         });
-        Box adicionarBox = Box.createHorizontalBox();
-        adicionarBox.add(adicionar);
+        c.gridx = 0; c.gridy = 2; c.gridwidth = 2;
+        frame.add(adicionar, c);
 
-        // Adiciona componentes ao frame
-        // Box layout horizontal para cada campo
-        // Box layout vertical para o frame em si
-        Box frameBox = Box.createVerticalBox();
-        frameBox.add(Box.createVerticalStrut(10));
-        frameBox.add(tipoBox);
-        frameBox.add(Box.createVerticalStrut(10));
-        frameBox.add(textoBox);
-        frameBox.add(Box.createVerticalStrut(10));
-        frameBox.add(adicionarBox);
-        frameBox.add(Box.createVerticalStrut(10));
+        frame.pack();
+        frame.setMinimumSize(frame.getSize());
 
-        frame.getContentPane().add(frameBox);
         return frame;
     }
 }

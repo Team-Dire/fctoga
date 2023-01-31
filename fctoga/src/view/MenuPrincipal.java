@@ -49,10 +49,17 @@ public class MenuPrincipal {
         frame.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(5, 5, 5, 5);
+        c.insets = new Insets(10, 10, 10, 10);
         c.gridx = 0;
         c.gridy = 0;
-        frame.add(new JLabel("Bem-vindo, " + usuarioLogado.getNomeCompleto()), c);
+        //frame.add(new JLabel("Bem-vindo, " + usuarioLogado.getNomeCompleto()), c);
+        JTextArea userInfoTextArea = new JTextArea();
+        userInfoTextArea.setText(String.format("Bem-vindo, %s (%s)\nCPF: %s", usuarioLogado.getNomeCompleto(), usuarioLogado.getTipoUsuario(), usuarioLogado.getCPF()));
+        userInfoTextArea.setFont(new Font(userInfoTextArea.getFont().getName(), Font.BOLD, userInfoTextArea.getFont().getSize()));
+        userInfoTextArea.setEditable(false);
+        userInfoTextArea.setOpaque(false);
+        userInfoTextArea.setFocusable(false);
+        frame.add(userInfoTextArea, c);
 
         for (JButton botao : botoes) {
             c.gridy++;
